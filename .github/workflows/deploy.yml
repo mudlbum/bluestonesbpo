@@ -1,0 +1,60 @@
+name: Build and deploy Bluestones BPO
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # 03:00 UTC = 12:00 KST. A daily rebuild even when nothing was committed, so
+    # that dead source links and expiring figures surface as a failed build rather
+    # than as a client noticing. The daily *authoring* run is a separate scheduled
+    # task; this is the safety net under it.
+    - cron: "0 3 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build site
+        run: python build.py
+
+      # Runs with CI set, so factcheck fetches every source URL for real rather
+      # than skipping liveness checks the way a local build does.
+      - name: Validate output
+        env:
+          CI: "true"
+        run: python scripts/validate.py
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

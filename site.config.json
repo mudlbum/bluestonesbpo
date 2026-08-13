@@ -1,0 +1,156 @@
+{
+  "site_name": "Bluestones BPO",
+  "tagline": "Your companion in Korea.",
+  "strapline": "Accounting, payroll and operations outsourcing for foreign companies in South Korea.",
+  "domain": "https://www.bluestonesbpo.com",
+  "locale": "en_US",
+  "lang": "en",
+  "timezone": "Asia/Seoul",
+
+  "languages": [
+    { "code": "en", "hreflang": "en", "label": "English", "prefix": "", "locale": "en_US" },
+    { "code": "ko", "hreflang": "ko-KR", "label": "한국어", "prefix": "/ko", "locale": "ko_KR" }
+  ],
+  "default_language": "en",
+
+  "business": {
+    "name": "Bluestones BPO",
+    "legal_name": "Bluestones BPO",
+    "type": "AccountingService",
+    "email": "info@bluestonesbpo.com",
+    "telephone": "+82-2-515-4534",
+    "fax": "+82-2-515-4536",
+    "founded": "2020",
+    "street": "Construction Building #711, Eonju-ro",
+    "locality": "Gangnam-gu",
+    "region": "Seoul",
+    "postal_code": "06050",
+    "country": "KR",
+    "country_name": "South Korea",
+    "latitude": 37.5045,
+    "longitude": 127.0489,
+    "hours": "Mo-Fr 09:00-18:00",
+    "price_range": "$$",
+    "languages_spoken": ["English", "Korean", "Japanese"],
+    "areas_served": [
+      "South Korea", "Seoul", "Gyeonggi-do", "Incheon", "Busan"
+    ],
+    "knows_about": [
+      "Korean corporate accounting",
+      "K-IFRS financial reporting",
+      "Korean payroll and four major insurances",
+      "Korea VAT filing",
+      "Korean corporate income tax",
+      "Foreign-invested company registration in Korea",
+      "Korea work visa sponsorship",
+      "Business process outsourcing"
+    ]
+  },
+
+  "contact": {
+    "form_endpoint": "",
+    "form_note": "Set this to a Formspree/Basin/Web3Forms endpoint. Until it is set the form degrades to a mailto: link, which still works.",
+    "booking_url": "",
+    "response_promise": "We reply to every enquiry within one Korean business day."
+  },
+
+  "analytics": {
+    "ga4_id": "",
+    "search_console_verification": "",
+    "naver_site_verification": "",
+    "bing_verification": ""
+  },
+
+  "social": {
+    "linkedin": "https://www.linkedin.com/company/bluestonesbpo/",
+    "facebook": "https://www.facebook.com/bluestonesbpo"
+  },
+
+  "brand": {
+    "navy": "#0C3C60",
+    "blue": "#39729B",
+    "sky": "#6EA4CA",
+    "pale": "#D1E0EB",
+    "slate": "#20303C",
+    "cyan": "#1EABC7",
+    "mist": "#EFF1F2"
+  },
+
+  "categories": [
+    {
+      "slug": "accounting",
+      "name": "Accounting & Reporting",
+      "blurb": "Bookkeeping, K-IFRS conversion, month-end close and the reports your head office actually needs.",
+      "accent": "#0C3C60",
+      "meta": "How accounting works in Korea for a foreign-owned subsidiary: statutory books, K-IFRS vs K-GAAP, month-end close, audit thresholds and head-office reporting."
+    },
+    {
+      "slug": "payroll",
+      "name": "Payroll & HR",
+      "blurb": "Monthly payroll, the four major insurances, severance pay, year-end settlement and employment rules.",
+      "accent": "#39729B",
+      "meta": "Korean payroll explained for foreign employers: the four major insurances, withholding, severance pay, year-end settlement and the Labor Standards Act obligations that catch newcomers out."
+    },
+    {
+      "slug": "tax",
+      "name": "Tax & VAT",
+      "blurb": "VAT cycles, corporate income tax, withholding on cross-border payments and transfer pricing documentation.",
+      "accent": "#1EABC7",
+      "meta": "Korean tax compliance for foreign companies: VAT filing cycles, corporate income tax returns, withholding tax on cross-border payments, and transfer pricing documentation."
+    },
+    {
+      "slug": "entity",
+      "name": "Entity Setup",
+      "blurb": "Branch, liaison office or subsidiary — FDI registration, capital injection and getting the company actually operating.",
+      "accent": "#6EA4CA",
+      "meta": "Setting up in Korea: choosing between a subsidiary, branch and liaison office, foreign direct investment registration, capital injection, and the sequence that actually gets you trading."
+    },
+    {
+      "slug": "compliance",
+      "name": "Compliance & Risk",
+      "blurb": "Statutory deadlines, audits, foreign exchange rules, internal controls and the penalties for missing them.",
+      "accent": "#20303C",
+      "meta": "Staying compliant in Korea: statutory filing deadlines, external audit thresholds, foreign exchange transaction reporting, internal controls, and what non-compliance actually costs."
+    },
+    {
+      "slug": "operations",
+      "name": "Operations in Korea",
+      "blurb": "Banking, signatories, vendor payments, office setup and running a small Korean operation from abroad.",
+      "accent": "#39729B",
+      "meta": "Running a Korean operation from overseas: corporate banking, bank signatory controls, vendor payment cycles, expense management and the practical mechanics of a small local office."
+    }
+  ],
+
+  "services": [
+    { "slug": "accounting-bookkeeping", "nav": "Accounting" },
+    { "slug": "payroll-outsourcing", "nav": "Payroll & HR" },
+    { "slug": "tax-vat-compliance", "nav": "Tax & VAT" },
+    { "slug": "company-registration", "nav": "Company Setup" },
+    { "slug": "operation-support", "nav": "Operation Support" }
+  ],
+
+  "nav": [
+    { "label": "Services", "url": "/services/" },
+    { "label": "Company Setup", "url": "/services/company-registration/" },
+    { "label": "Insights", "url": "/insights/" },
+    { "label": "About", "url": "/about/" },
+    { "label": "Contact", "url": "/contact/" }
+  ],
+
+  "posts_per_page": 12,
+
+  "factcheck": {
+    "enforce_from": "2026-08-13",
+    "min_sources": 3,
+    "min_primary": 1,
+    "offline_ok": true,
+    "note": "Posts dated on or after enforce_from must carry per-figure source indices. validate.py fails the build otherwise. offline_ok skips live URL fetching when the build has no network (local dev); CI always checks links."
+  },
+
+  "editorial": {
+    "author_name": "The Bluestones BPO Desk",
+    "author_slug": "bluestones-desk",
+    "author_role": "Accounting, Payroll & Compliance Team",
+    "author_bio": "Bluestones BPO's Seoul-based accounting, payroll and compliance team writes these notes for foreign companies operating in Korea. Every figure, rate, threshold and deadline is checked against the primary source — the National Tax Service, the Ministry of Employment and Labor, the four major insurance authorities, the Korea Immigration Service or the relevant statute — and dated to the period it covers. Guidance here is general; it is not a substitute for engagement-specific advice."
+  }
+}
