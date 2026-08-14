@@ -46,6 +46,12 @@ FORBIDDEN = ["lorem ipsum", "TODO:", "FIXME", "XXXX", "{{", "[INSERT", "TK TK",
 NOINDEX_ALLOWED = {"/404.html"}
 BAD_ROBOTS = ("noindex", "nofollow", "nosnippet", "noimageindex", "noarchive")
 
+# Staging inverts the rule: a reachable copy of the site that Google indexes is
+# duplicate content competing with production, so there noindex is required
+# rather than forbidden. The gate checks for the opposite defect in that mode —
+# a staging build that forgot to suppress indexing.
+IS_STAGING = bool((CFG.get("staging") or {}).get("enabled"))
+
 errors: list[str] = []
 warnings: list[str] = []
 
@@ -78,7 +84,11 @@ def main():
             if not os.path.exists(target):
                 err(f"missing required policy page: /{p + '/' if p else ''}{page}/")
 
-    pages = sorted(glob.glob(os.path.join(DIST, "**", "*.html"), recursive=True))
+    # Anything beginning with an underscore is a local scratch file (a flattened
+    # preview, a diff artefact) rather than a page the build produced. CI starts
+    # from a clean checkout so this only ever matters on a developer's machine.
+    pages = [p for p in sorted(glob.glob(os.path.join(DIST, "**", "*.html"), recursive=True))
+             if not os.path.basename(p).startswith("_")]
     if len(pages) < 12:
         err(f"only {len(pages)} pages built — expected at least 12")
 
@@ -95,6 +105,10 @@ def main():
         m = re.search(r'<meta name="robots" content="([^"]*)"', h)
         if not m:
             err(f"{rel}: no robots meta tag")
+        elif IS_STAGING:
+            if "noindex" not in m.group(1).lower():
+                err(f"{rel}: staging build is missing noindex — a crawlable staging copy "
+                    "competes with the production site as duplicate content")
         else:
             directives = [d.strip().lower() for d in m.group(1).split(",")]
             for bad in BAD_ROBOTS:
@@ -267,7 +281,8 @@ def main():
             err(f"sitemap lists only {len(locs)} URLs")
         if len(locs) != len(set(locs)):
             err("sitemap contains duplicate <loc> entries")
-        domain = CFG["domain"].rstrip("/")
+        domain = ((CFG.get("staging") or {}).get("domain") if IS_STAGING
+                  else CFG["domain"]).rstrip("/")
         for u in locs:
             if not u.startswith(domain):
                 err(f"sitemap URL on wrong host: {u}")

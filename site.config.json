@@ -6,13 +6,28 @@
   "locale": "en_US",
   "lang": "en",
   "timezone": "Asia/Seoul",
-
+  "staging": {
+    "enabled": true,
+    "domain": "https://new.bluestonesbpo.com",
+    "note": "While enabled the build uses the staging domain, emits noindex,nofollow on every page, serves a Disallow-all robots.txt, and shows a banner. This is the ONE case where noindex is correct: a reachable copy of the site that Google indexes is duplicate content competing with the real thing. Set enabled:false at go-live and the site returns to fully indexable with the production domain."
+  },
   "languages": [
-    { "code": "en", "hreflang": "en", "label": "English", "prefix": "", "locale": "en_US" },
-    { "code": "ko", "hreflang": "ko-KR", "label": "한국어", "prefix": "/ko", "locale": "ko_KR" }
+    {
+      "code": "en",
+      "hreflang": "en",
+      "label": "English",
+      "prefix": "",
+      "locale": "en_US"
+    },
+    {
+      "code": "ko",
+      "hreflang": "ko-KR",
+      "label": "한국어",
+      "prefix": "/ko",
+      "locale": "ko_KR"
+    }
   ],
   "default_language": "en",
-
   "business": {
     "name": "Bluestones BPO",
     "legal_name": "Bluestones BPO",
@@ -31,9 +46,17 @@
     "longitude": 127.0489,
     "hours": "Mo-Fr 09:00-18:00",
     "price_range": "$$",
-    "languages_spoken": ["English", "Korean", "Japanese"],
+    "languages_spoken": [
+      "English",
+      "Korean",
+      "Japanese"
+    ],
     "areas_served": [
-      "South Korea", "Seoul", "Gyeonggi-do", "Incheon", "Busan"
+      "South Korea",
+      "Seoul",
+      "Gyeonggi-do",
+      "Incheon",
+      "Busan"
     ],
     "knows_about": [
       "Korean corporate accounting",
@@ -46,26 +69,22 @@
       "Business process outsourcing"
     ]
   },
-
   "contact": {
     "form_endpoint": "",
     "form_note": "Set this to a Formspree/Basin/Web3Forms endpoint. Until it is set the form degrades to a mailto: link, which still works.",
     "booking_url": "",
     "response_promise": "We reply to every enquiry within one Korean business day."
   },
-
   "analytics": {
     "ga4_id": "",
     "search_console_verification": "",
     "naver_site_verification": "",
     "bing_verification": ""
   },
-
   "social": {
     "linkedin": "https://www.linkedin.com/company/bluestonesbpo/",
     "facebook": "https://www.facebook.com/bluestonesbpo"
   },
-
   "brand": {
     "navy": "#0C3C60",
     "blue": "#39729B",
@@ -75,7 +94,6 @@
     "cyan": "#1EABC7",
     "mist": "#EFF1F2"
   },
-
   "categories": [
     {
       "slug": "accounting",
@@ -120,25 +138,51 @@
       "meta": "Running a Korean operation from overseas: corporate banking, bank signatory controls, vendor payment cycles, expense management and the practical mechanics of a small local office."
     }
   ],
-
   "services": [
-    { "slug": "accounting-bookkeeping", "nav": "Accounting" },
-    { "slug": "payroll-outsourcing", "nav": "Payroll & HR" },
-    { "slug": "tax-vat-compliance", "nav": "Tax & VAT" },
-    { "slug": "company-registration", "nav": "Company Setup" },
-    { "slug": "operation-support", "nav": "Operation Support" }
+    {
+      "slug": "accounting-bookkeeping",
+      "nav": "Accounting"
+    },
+    {
+      "slug": "payroll-outsourcing",
+      "nav": "Payroll & HR"
+    },
+    {
+      "slug": "tax-vat-compliance",
+      "nav": "Tax & VAT"
+    },
+    {
+      "slug": "company-registration",
+      "nav": "Company Setup"
+    },
+    {
+      "slug": "operation-support",
+      "nav": "Operation Support"
+    }
   ],
-
   "nav": [
-    { "label": "Services", "url": "/services/" },
-    { "label": "Company Setup", "url": "/services/company-registration/" },
-    { "label": "Insights", "url": "/insights/" },
-    { "label": "About", "url": "/about/" },
-    { "label": "Contact", "url": "/contact/" }
+    {
+      "label": "Services",
+      "url": "/services/"
+    },
+    {
+      "label": "Company Setup",
+      "url": "/services/company-registration/"
+    },
+    {
+      "label": "Insights",
+      "url": "/insights/"
+    },
+    {
+      "label": "About",
+      "url": "/about/"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact/"
+    }
   ],
-
   "posts_per_page": 12,
-
   "factcheck": {
     "enforce_from": "2026-08-13",
     "min_sources": 3,
@@ -146,7 +190,6 @@
     "offline_ok": true,
     "note": "Posts dated on or after enforce_from must carry per-figure source indices. validate.py fails the build otherwise. offline_ok skips live URL fetching when the build has no network (local dev); CI always checks links."
   },
-
   "editorial": {
     "author_name": "The Bluestones BPO Desk",
     "author_slug": "bluestones-desk",

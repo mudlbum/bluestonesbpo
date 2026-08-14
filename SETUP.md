@@ -26,14 +26,56 @@ this site gets visitors — skipping them makes everything else pointless.
 
 ## 1. Get it online
 
-- [ ] `git init && git add -A && git commit -m "initial"` in this folder
-- [ ] Create a GitHub repository and push to `main`
+The repository is already initialised and the first commit is made. To create the
+GitHub repo and push:
+
+**Easy way** — double-click `publish-to-github.bat` in this folder. It creates the repo,
+pushes `main`, and turns on Pages. It borrows the token from your neighbouring
+`futureofkorea` remote and does not write a copy of it anywhere.
+
+**Manual way** — create an empty repo at <https://github.com/new> named `bluestonesbpo`
+(no README, no .gitignore, no licence), then:
+
+```bash
+git remote add origin https://github.com/<your-username>/bluestonesbpo.git
+git branch -M main
+git push -u origin main
+```
+
+- [ ] Repo created and `main` pushed
 - [ ] **Settings → Pages → Source: GitHub Actions**
 - [ ] Wait for the first workflow run to go green
-- [ ] **Settings → Pages → Custom domain:** your domain → Save
+
+### 1a. Staging first — this is where the build currently points
+
+`www.bluestonesbpo.com` is **already live and serving the Wix site**, so the build ships
+in staging mode. `staging.enabled` is `true` in `site.config.json`, which makes it use
+`new.bluestonesbpo.com`, emit `noindex,nofollow` on every page, serve a `Disallow: /`
+robots.txt, and show an orange banner. Nothing about the live Wix site changes.
+
+- [ ] DNS at your registrar: add a `CNAME` record — host `new`, value
+      `<your-github-username>.github.io`
+- [ ] **Settings → Pages → Custom domain:** `new.bluestonesbpo.com` → Save
+- [ ] Wait for the certificate, then tick **Enforce HTTPS** (can take an hour)
+- [ ] Review at `https://new.bluestonesbpo.com`
+
+> The `noindex` here is deliberate, and it is the one place it belongs. A crawlable copy
+> of your site is duplicate content competing with the real one. `validate.py` enforces
+> it in reverse while staging is on — it now *fails* the build if a page is missing
+> `noindex`.
+
+### 1b. Go live, when you're happy with it
+
+- [ ] Set `staging.enabled` to `false` in `site.config.json`
+- [ ] `python build.py && python scripts/validate.py` — confirm the robots meta is back to
+      `index,follow` and `dist/CNAME` reads `www.bluestonesbpo.com`
+- [ ] Commit and push
+- [ ] **Settings → Pages → Custom domain:** `www.bluestonesbpo.com` → Save
+- [ ] DNS: repoint the `www` `CNAME` from Wix to `<your-github-username>.github.io`
 - [ ] DNS: four `A` records on the apex pointing to
       `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-- [ ] DNS: `CNAME` for `www` → `<your-github-username>.github.io`
+- [ ] Delete the `new` CNAME record so the staging copy stops resolving
+- [ ] Keep the Wix site in your account, unpublished, for a few weeks as a rollback
 - [ ] Tick **Enforce HTTPS** once the certificate issues (can take an hour)
 
 ## 2. Migrate from Wix without losing what little equity exists **(traffic)**

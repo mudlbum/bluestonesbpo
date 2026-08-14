@@ -52,7 +52,17 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 DIST = os.environ.get("BSB_DIST") or os.path.join(ROOT, "dist")
 CFG = json.load(open(os.path.join(ROOT, "site.config.json"), encoding="utf-8"))
 
-SITE = CFG["domain"].rstrip("/")
+# Staging mode. The site is reachable at a subdomain for review while the live
+# domain still serves the old site. A crawlable copy of a site is duplicate
+# content competing with the original, so staging is the single case where
+# noindex is the correct answer rather than the defect this project exists to fix.
+STAGING = CFG.get("staging") or {}
+IS_STAGING = bool(STAGING.get("enabled"))
+SITE = (STAGING.get("domain") if IS_STAGING else CFG["domain"]).rstrip("/")
+
+ROBOTS_DEFAULT = ("noindex,nofollow" if IS_STAGING else
+                  "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1")
+
 CATS = {c["slug"]: c for c in CFG["categories"]}
 BIZ = CFG["business"]
 BRAND = CFG["brand"]
@@ -573,8 +583,7 @@ def inject_cta(html_body: str, lang: str, every: int = 4) -> str:
 
 # ──────────────────────────────────────────────────────────────── layout ──
 def head(title, description, canonical, *, lang, og_image, og_type="website",
-         published=None, modified=None, jsonld=None, alternates=None,
-         robots="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"):
+         published=None, modified=None, jsonld=None, alternates=None, robots=None):
     """
     The <head>.
 
@@ -585,6 +594,8 @@ def head(title, description, canonical, *, lang, og_image, og_type="website",
     an AI answer engine at all. Nothing in this generator can emit those values:
     the only override used anywhere is `noindex,follow` on the 404.
     """
+    # In staging every page is noindex regardless of what the caller asked for.
+    robots = ROBOTS_DEFAULT if robots is None else ("noindex,nofollow" if IS_STAGING else robots)
     L = LANGS[lang]
     gsc = CFG["analytics"].get("search_console_verification")
     naver = CFG["analytics"].get("naver_site_verification")
@@ -684,8 +695,15 @@ def header_html(lang, active="", alternates=None):
     switch = (f'<a class="lang-switch" href="{other_url}" hreflang="{LANGS[other]["hreflang"]}" '
               f'rel="alternate">{esc(T(lang, "lang_switch"))}</a>')
 
+    banner = ""
+    if IS_STAGING:
+        banner = ('<div class="staging-bar" role="status">Staging preview — not indexed by '
+                  'search engines. The live site is still '
+                  '<a href="https://www.bluestonesbpo.com">www.bluestonesbpo.com</a>.</div>')
+
     return f"""<body>
 <a class="skip" href="#main">{T(lang,'skip')}</a>
+{banner}
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="{pfx(lang)}/" aria-label="{esc(CFG['site_name'])}">
@@ -1591,6 +1609,13 @@ def render_feeds(posts, services, pages):
           'xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" '
           'xmlns:xhtml="http://www.w3.org/1999/xhtml">'
           + "".join(entry(*u) for u in urls) + "</urlset>")
+
+    if IS_STAGING:
+        write(os.path.join(DIST, "robots.txt"),
+              "# Staging copy of bluestonesbpo.com — not for indexing.\n"
+              "# The production site is the canonical one.\n"
+              "User-agent: *\nDisallow: /\n")
+        return
 
     write(os.path.join(DIST, "robots.txt"), f"""User-agent: *
 Allow: /

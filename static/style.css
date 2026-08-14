@@ -83,6 +83,15 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 
 :focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 
+/* Staging banner — only rendered when staging.enabled is true in site.config.json.
+   Deliberately loud: the worst outcome of a staging site is somebody mistaking it
+   for the live one, or linking to it. */
+.staging-bar {
+  background: #8A4E08; color: #fff; text-align: center;
+  font-size: .82rem; padding: .5rem 1rem; letter-spacing: .01em;
+}
+.staging-bar a { color: #FFD9A0; }
+
 /* ─────────────────────────────────────────────────────────────── header ── */
 .site-header {
   background: var(--navy);

@@ -4,3 +4,7 @@ __pycache__/
 .DS_Store
 .venv/
 .cache/
+
+# One-time local setup helpers — not part of the site
+publish-to-github.ps1
+publish-to-github.bat
