@@ -1611,13 +1611,15 @@ def render_feeds(posts, services, pages):
           + "".join(entry(*u) for u in urls) + "</urlset>")
 
     if IS_STAGING:
+        # Only robots.txt differs in staging. Everything below this — the feed, the
+        # llms.txt map, the favicon, the manifest — still has to be written, or the
+        # pages that reference them ship broken links.
         write(os.path.join(DIST, "robots.txt"),
               "# Staging copy of bluestonesbpo.com — not for indexing.\n"
               "# The production site is the canonical one.\n"
               "User-agent: *\nDisallow: /\n")
-        return
-
-    write(os.path.join(DIST, "robots.txt"), f"""User-agent: *
+    else:
+        write(os.path.join(DIST, "robots.txt"), f"""User-agent: *
 Allow: /
 
 # Answer engines are welcome. This site is written to be cited: figures are dated,
@@ -1726,11 +1728,25 @@ Sitemap: {SITE}/sitemap.xml
 
 # ──────────────────────────────────────────────────────────────── build ──
 def build():
+    # Clearing dist has to actually happen. Overwriting in place leaves orphaned
+    # files from a previous build, and validate.py then passes against artefacts
+    # the current code did not produce — a false green that only surfaces in CI,
+    # where the checkout is clean. Some synced/network mounts refuse unlink but
+    # still permit rename, so fall back to moving the stale tree aside.
     if os.path.isdir(DIST):
         try:
             shutil.rmtree(DIST)
         except OSError as e:
-            print(f"! could not clear {DIST} ({e}); overwriting in place")
+            stale = f"{DIST}.stale-{dt.datetime.now():%Y%m%d-%H%M%S}"
+            try:
+                os.rename(DIST, stale)
+                print(f"! could not delete {DIST} ({e.strerror}); moved aside to "
+                      f"{os.path.basename(stale)} — safe to delete by hand")
+            except OSError:
+                print(f"!! could not clear or rename {DIST} ({e.strerror}).\n"
+                      f"!! Building over the top. Validation results may reflect stale\n"
+                      f"!! files from an earlier build — verify with a clean directory:\n"
+                      f"!!     BSB_DIST=/tmp/dist-check python3 build.py")
     os.makedirs(DIST, exist_ok=True)
 
     posts, services, pages = load_posts(), load_services(), load_pages()

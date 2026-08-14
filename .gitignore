@@ -8,3 +8,5 @@ __pycache__/
 # One-time local setup helpers — not part of the site
 publish-to-github.ps1
 publish-to-github.bat
+enable-pages.ps1
+enable-pages.bat
