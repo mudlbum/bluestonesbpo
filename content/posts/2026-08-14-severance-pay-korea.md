@@ -41,8 +41,8 @@ faq:
     a: "Yes. The entitlement attaches to the employment relationship under Korean law, not to the nationality or visa status of the employee. A foreign national on an E-7 or D-8 visa with a year of continuous service with the same employer is entitled on exactly the same basis as a Korean national. Departing foreign employees frequently do not know this and do not ask — which does not reduce the employer's obligation, and does create a liability that sits on your books whether or not it has been claimed."
 
 resources:
-  - title: "Guarantee of Employees' Retirement Benefits Act (English)"
-    url: "https://elaw.klri.re.kr/eng_mobile/viewer.do?hseq=60203&type=lawname&key=retirement+benefit"
+  - title: "Act on the Guarantee of Employees' Retirement Benefits (English)"
+    url: "https://elaw.klri.re.kr/eng_service/lawView.do?hseq=60203&lang=ENG"
     note: "The statute itself — Articles 4, 8 and 9 cover eligibility, the formula and the payment deadline"
   - title: "Ministry of Employment and Labor — Labor Standards (English)"
     url: "https://www.moel.go.kr/english/policy/laborStandards.do"
@@ -58,8 +58,8 @@ resources:
     note: "Retirement income tax withholding at the point of payment"
 
 sources:
-  - title: "Guarantee of Employees' Retirement Benefits Act — Articles 4, 5, 8 and 9 (official English translation)"
-    url: "https://elaw.klri.re.kr/eng_mobile/viewer.do?hseq=60203&type=lawname&key=retirement+benefit"
+  - title: "Act on the Guarantee of Employees' Retirement Benefits — Articles 4, 5, 8 and 9 (English translation)"
+    url: "https://elaw.klri.re.kr/eng_service/lawView.do?hseq=60203&lang=ENG"
     publisher: "Korea Legislation Research Institute"
     accessed: 2026-08-14
     primary: true
@@ -242,7 +242,7 @@ That comparison takes minutes and answers the question. It is also the first thi
 [how the books are kept](/services/accounting-bookkeeping/) — an accrual only means something if
 it is in the ledger the accounts are drawn from.
 
-*Figures and statutory references current as at 14 August 2026, checked against the official
-English translation of the Guarantee of Employees' Retirement Benefits Act and the Labor
+*Figures and statutory references current as at 14 August 2026, checked against the Korea Legislation Research Institute
+English translation of the Act on the Guarantee of Employees' Retirement Benefits and the Labor
 Standards Act definition of average wage. Korean employment law is amended regularly — confirm
 against the sources listed below before acting, and take advice on your specific facts.*

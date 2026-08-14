@@ -58,6 +58,15 @@ URL, the publisher, and the period the figure covers.
 If sources disagree, publish the range and name both. If you cannot verify it, it does not
 go in the article — not even hedged.
 
+> **The URL you cite must survive a plain GET from a machine.** CI fetches every
+> `sources:` URL from a bare runner with no session, no cookies and no JavaScript. Korean
+> government sites frequently serve a working page to your browser and a 404 to that
+> request — search-result URLs, `eng_mobile/…` viewers and anything carrying a
+> `key=`/`query=` parameter are the usual offenders. Prefer the canonical document URL
+> (`elaw.klri.re.kr/eng_service/lawView.do?hseq=…&lang=ENG` rather than the mobile viewer
+> you happened to land on). If in doubt, open it in a private window with JavaScript
+> disabled before you cite it.
+
 ### Record the evidence as you go
 
 1. Add each source to `sources:` with `title`, `url`, `publisher`, `accessed:` (today) and
