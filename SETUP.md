@@ -94,11 +94,11 @@ pages.
       | `/about-us` | `/about/` |
       | `/services` | `/services/` |
       | `/team` | `/services/operation-support/` |
-      | `/news` | `/insights/` |
-      | `/news/post/<slug>` | `/insights/<category>/<slug>/` if rewritten, else `/insights/` |
+      | `/news` | `/blog/` |
+      | `/news/post/<slug>` | `/blog/<category>/<slug>/` if rewritten, else `/blog/` |
       | `/contact` | `/contact/` |
 
-- [ ] If the old blog posts are not being rewritten, redirect them to `/insights/` rather
+- [ ] If the old blog posts are not being rewritten, redirect them to `/blog/` rather
       than letting them 404. They were thin and unsourced, so there is no case for porting
       them as-is.
 - [ ] Update the links on **LinkedIn** and **Facebook** to the new domain. These are two of

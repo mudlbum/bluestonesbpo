@@ -69,6 +69,41 @@
       "Business process outsourcing"
     ]
   },
+  "team": [
+    {
+      "name": "Woojeong Kim",
+      "job_title": "International & Korea Tax Specialist",
+      "credential": "Korean Certified Public Accountant (KICPA)",
+      "affiliation": "WITH Accounting Firm",
+      "alumni": "Korea University",
+      "knows_about": ["International tax", "Korean corporate income tax", "Transfer pricing", "Tax treaty relief"]
+    },
+    {
+      "name": "Brian H. Morikuni",
+      "job_title": "General Manager",
+      "credential": "",
+      "affiliation": "",
+      "alumni": "University of Hawaii at Manoa",
+      "knows_about": ["Cross-border entity management", "Corporate governance", "Business process outsourcing"]
+    },
+    {
+      "name": "Jaeeun Kim",
+      "job_title": "Korea Business Setup Specialist",
+      "credential": "",
+      "affiliation": "Soma Development",
+      "alumni": "",
+      "knows_about": ["Foreign-invested company registration", "Korea market entry", "Commercial operations"]
+    },
+    {
+      "name": "Steve S. Shin",
+      "job_title": "Business Modeling Specialist",
+      "credential": "",
+      "affiliation": "",
+      "alumni": "Wharton School, University of Pennsylvania",
+      "knows_about": ["Financial modelling", "Business strategy", "Unit economics"]
+    }
+  ],
+
   "contact": {
     "form_endpoint": "",
     "form_note": "Set this to a Formspree/Basin/Web3Forms endpoint. Until it is set the form degrades to a mailto: link, which still works.",
@@ -172,9 +207,9 @@
       "url": "/services/company-registration/"
     },
     {
-      "label": "Insights",
-      "label_ko": "인사이트",
-      "url": "/insights/"
+      "label": "Blog",
+      "label_ko": "블로그",
+      "url": "/blog/"
     },
     {
       "label": "About",

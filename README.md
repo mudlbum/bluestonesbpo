@@ -81,9 +81,9 @@ dist/                     build output (git-ignored; CI rebuilds it)
 /ko/                              Korean home
 /services/                        service index
 /services/payroll-outsourcing/    service pillar page
-/insights/                        article index
-/insights/payroll/                category
-/insights/payroll/<slug>/         article
+/blog/                        article index
+/blog/payroll/                category
+/blog/payroll/<slug>/         article
 /about/  /contact/  /terms/ …     pages
 ```
 

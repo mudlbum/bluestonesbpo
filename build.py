@@ -89,7 +89,9 @@ STR = {
         "primary": "Primary",
         "home": "Home",
         "services": "Services",
-        "insights": "Insights",
+        "insights": "Blog",
+        "other_services": "Other services",
+        "included": "What's included",
         "contact": "Contact",
         "about": "About",
         "cta": "Book a consultation",
@@ -109,8 +111,8 @@ STR = {
         "updated": "Updated",
         "min_read": "min read",
         "by": "By",
-        "latest": "Latest insights",
-        "all_insights": "All insights",
+        "latest": "From the blog",
+        "all_insights": "All articles",
         "no_posts": "No articles in this section yet.",
         "related_services": "How we help with this",
         "lang_switch": "한국어로 보기",
@@ -137,7 +139,9 @@ STR = {
         "primary": "주요 메뉴",
         "home": "홈",
         "services": "서비스",
-        "insights": "인사이트",
+        "insights": "블로그",
+        "other_services": "다른 서비스",
+        "included": "제공 범위",
         "contact": "문의",
         "about": "회사 소개",
         "cta": "상담 신청",
@@ -157,8 +161,8 @@ STR = {
         "updated": "수정",
         "min_read": "분 소요",
         "by": "작성",
-        "latest": "최신 인사이트",
-        "all_insights": "전체 인사이트",
+        "latest": "블로그 최신 글",
+        "all_insights": "전체 글 보기",
         "no_posts": "이 섹션에는 아직 글이 없습니다.",
         "related_services": "관련 서비스",
         "lang_switch": "View in English",
@@ -519,7 +523,7 @@ def load_posts():
         p["category"] = p.get("category", "accounting")
         p["date"] = p.get("date") or dt.date.today()
         p["updated"] = p.get("updated") or p["date"]
-        p["url"] = f"{pfx(p['lang'])}/insights/{p['category']}/{p['slug']}/"
+        p["url"] = f"{pfx(p['lang'])}/blog/{p['category']}/{p['slug']}/"
         p["abs_url"] = SITE + p["url"]
     _pair_translations(posts)
     posts.sort(key=lambda p: (str(p["date"]), p["slug"]), reverse=True)
@@ -638,6 +642,7 @@ def head(title, description, canonical, *, lang, og_image, og_type="website",
 <link rel="canonical" href="{esc(canonical)}">
 <meta property="og:site_name" content="{esc(CFG['site_name'])}">
 <meta property="og:locale" content="{L['locale']}">
+{chr(10).join(f'<meta property="og:locale:alternate" content="{LANGS[o]["locale"]}">' for o in LANGS if o != lang)}
 <meta property="og:type" content="{og_type}">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}">
@@ -751,11 +756,14 @@ def header_html(lang, active="", alternates=None):
 
 
 def footer_html(lang, services, posts):
+    """The footer carries contact details, the company links and the legal links.
+
+    Services and Insights used to have columns here too. They were removed: the
+    header already links to both, every service page cross-links the other four,
+    and five columns of links is the pattern that makes a footer unreadable. No
+    crawl path is lost — the sitemap and the header cover it.
+    """
     year = dt.date.today().year
-    svc = "".join(f'<li><a href="{s["url"]}">{esc(s["title"])}</a></li>'
-                  for s in services if s["lang"] == lang)
-    cats = "".join(f'<li><a href="{pfx(lang)}/insights/{c["slug"]}/">{esc(c["name"])}</a></li>'
-                   for c in live_categories(posts, lang))
     addr_en = (f"{BIZ['street']}, {BIZ['locality']}, {BIZ['region']} {BIZ['postal_code']}, "
                f"{BIZ['country_name']}")
     legal = {
@@ -766,9 +774,9 @@ def footer_html(lang, services, posts):
     }[lang]
     legal_html = "".join(f'<li><a href="{pfx(lang)}{u}">{esc(t)}</a></li>' for t, u in legal)
     company = {
-        "en": [("About us", "/about/"), ("Contact", "/contact/"), ("Insights", "/insights/"),
+        "en": [("About us", "/about/"), ("Contact", "/contact/"), ("Insights", "/blog/"),
                ("Editorial policy", "/editorial-policy/")],
-        "ko": [("회사 소개", "/about/"), ("문의", "/contact/"), ("인사이트", "/insights/"),
+        "ko": [("회사 소개", "/about/"), ("문의", "/contact/"), ("인사이트", "/blog/"),
                ("콘텐츠 정책", "/editorial-policy/")],
     }[lang]
     company_html = "".join(f'<li><a href="{pfx(lang)}{u}">{esc(t)}</a></li>' for t, u in company)
@@ -805,8 +813,6 @@ def footer_html(lang, services, posts):
         <a href="{CFG['social']['facebook']}" rel="noopener me" target="_blank">Facebook</a>
       </p>
     </div>
-    <div><h2 class="footer-h">{T(lang,'services')}</h2><ul class="plain">{svc}</ul></div>
-    <div><h2 class="footer-h">{T(lang,'insights')}</h2><ul class="plain">{cats}</ul></div>
     <div><h2 class="footer-h">{T(lang,'company')}</h2><ul class="plain">{company_html}</ul></div>
     <div><h2 class="footer-h">{T(lang,'legal')}</h2><ul class="plain">{legal_html}</ul></div>
   </div>
@@ -861,6 +867,9 @@ def org_node():
             "availableLanguage": BIZ["languages_spoken"],
             "areaServed": "KR",
         }],
+        # Referenced by @id; the full Person nodes are emitted on /about/.
+        "employee": [{"@id": f"{SITE}/about/#{slugify(t['name'])}"}
+                     for t in CFG.get("team", [])],
     }
 
 
@@ -885,6 +894,43 @@ def author_node():
         "description": CFG["editorial"]["author_bio"],
         "parentOrganization": {"@id": SITE + "/#organization"},
     }
+
+
+def person_nodes():
+    """Named professionals, marked up as Person entities.
+
+    This site publishes tax and payroll guidance, which is money-adjacent
+    territory where both Google's quality raters and answer engines weigh who is
+    behind the advice. A named accountant with a stated credential, employer and
+    university is a far stronger expertise signal than an anonymous "team", and
+    it is also what lets an assistant answer "who at Bluestones handles Korean
+    tax" with a name. Everything here is drawn from the About page — no invented
+    qualifications.
+    """
+    out = []
+    for t in CFG.get("team", []):
+        node = {
+            "@type": "Person",
+            "@id": f"{SITE}/about/#{slugify(t['name'])}",
+            "name": t["name"],
+            "jobTitle": t["job_title"],
+            "worksFor": {"@id": SITE + "/#organization"},
+            "url": SITE + "/about/",
+        }
+        if t.get("knows_about"):
+            node["knowsAbout"] = t["knows_about"]
+        if t.get("credential"):
+            node["hasCredential"] = {
+                "@type": "EducationalOccupationalCredential",
+                "credentialCategory": "professional certification",
+                "name": t["credential"],
+            }
+        if t.get("alumni"):
+            node["alumniOf"] = {"@type": "CollegeOrUniversity", "name": t["alumni"]}
+        if t.get("affiliation"):
+            node["affiliation"] = {"@type": "Organization", "name": t["affiliation"]}
+        out.append(node)
+    return out
 
 
 def breadcrumbs(items):
@@ -916,7 +962,7 @@ def post_card(p, *, eager=False, size="md"):
          loading="{'eager' if eager else 'lazy'}" {'fetchpriority="high"' if eager else 'decoding="async"'}>
   </a>
   <div class="card-body">
-    <a class="chip" href="{pfx(p['lang'])}/insights/{p['category']}/">{esc(c.get('name', p['category']))}</a>
+    <a class="chip" href="{pfx(p['lang'])}/blog/{p['category']}/">{esc(c.get('name', p['category']))}</a>
     <h3 class="card-title"><a href="{p['url']}">{esc(p['title'])}</a></h3>
     <p class="card-dek">{esc(p.get('description', ''))}</p>
     <p class="card-meta"><time datetime="{iso(p['date'])}">{pretty_date(p['date'], p['lang'])}</time>
@@ -987,7 +1033,7 @@ def sources_block(obj, lang):
   <ol class="plain sourcelist">{rows}</ol></section>"""
 
 
-def toc_block(toc, lang):
+def toc_block(toc, lang, sticky=False):
     if len(toc) < 3:
         return ""
 
@@ -996,7 +1042,11 @@ def toc_block(toc, lang):
                        + (f'<ul>{li(n["children"])}</ul>' if n.get("children") else "")
                        + "</li>" for n in nodes)
 
-    return f"""<nav class="toc" aria-labelledby="toc-h">
+    # The sticky variant sits in a sidebar beside the article. On a 3,000-word
+    # service page that is the difference between scanning and scrolling blind;
+    # it collapses to a normal block on narrow screens.
+    cls = "toc toc-sticky" if sticky else "toc"
+    return f"""<nav class="{cls}" aria-labelledby="toc-h">
   <h2 id="toc-h">{T(lang,'on_this_page')}</h2><ul>{li(toc)}</ul></nav>"""
 
 
@@ -1026,8 +1076,8 @@ def render_post(p, all_posts, services):
 
     graph = [org_node(), website_node(lang), author_node(),
              breadcrumbs([(T(lang, "home"), pfx(lang) + "/"),
-                          (T(lang, "insights"), pfx(lang) + "/insights/"),
-                          (cat.get("name", p["category"]), f"{pfx(lang)}/insights/{p['category']}/"),
+                          (T(lang, "insights"), pfx(lang) + "/blog/"),
+                          (cat.get("name", p["category"]), f"{pfx(lang)}/blog/{p['category']}/"),
                           (p["title"], p["url"])])]
     article = {
         "@type": "BlogPosting",
@@ -1064,7 +1114,7 @@ def render_post(p, all_posts, services):
                published=iso(p["date"]), modified=iso(p["updated"]),
                alternates=p.get("alternates"),
                jsonld={"@context": "https://schema.org", "@graph": graph})
-    doc += header_html(lang, "insights", p.get("alternates"))
+    doc += header_html(lang, "blog", p.get("alternates"))
     upd = ("" if str(p["updated"]) == str(p["date"]) else
            f'<span aria-hidden="true">·</span><time datetime="{iso(p["updated"])}">'
            f'{T(lang,"updated")} {pretty_date(p["updated"], lang)}</time>')
@@ -1073,12 +1123,12 @@ def render_post(p, all_posts, services):
   <div class="wrap wrap-narrow">
     <nav class="crumbs" aria-label="{T(lang,'breadcrumb')}">
       <ol><li><a href="{pfx(lang)}/">{T(lang,'home')}</a></li>
-      <li><a href="{pfx(lang)}/insights/">{T(lang,'insights')}</a></li>
-      <li><a href="{pfx(lang)}/insights/{p['category']}/">{esc(cat.get('name',''))}</a></li>
+      <li><a href="{pfx(lang)}/blog/">{T(lang,'insights')}</a></li>
+      <li><a href="{pfx(lang)}/blog/{p['category']}/">{esc(cat.get('name',''))}</a></li>
       <li aria-current="page">{esc(p['title'])}</li></ol>
     </nav>
     <header class="article-head">
-      <a class="chip" href="{pfx(lang)}/insights/{p['category']}/">{esc(cat.get('name',''))}</a>
+      <a class="chip" href="{pfx(lang)}/blog/{p['category']}/">{esc(cat.get('name',''))}</a>
       <h1>{esc(p['title'])}</h1>
       <p class="article-dek">{esc(p.get('description',''))}</p>
       <div class="byline">
@@ -1173,10 +1223,15 @@ def render_service(s, services, posts):
                jsonld={"@context": "https://schema.org", "@graph": graph})
     doc += header_html(lang, "services", s.get("alternates"))
 
+    # The deliverables list moves into the hero as a summary card. It answers
+    # "what do I actually get" before the reader commits to 3,000 words, and it
+    # fills the right-hand column that a headline alone leaves empty.
     deliver = ""
     if s.get("deliverables"):
-        deliver = ('<ul class="deliverables">'
-                   + "".join(f"<li>{esc(x)}</li>" for x in s["deliverables"]) + "</ul>")
+        deliver = f"""<aside class="svc-summary">
+      <h2>{T(lang,'included')}</h2>
+      <ul>{''.join(f'<li>{esc(x)}</li>' for x in s['deliverables'])}</ul>
+    </aside>"""
 
     doc += f"""
 <div class="svc-hero">
@@ -1186,26 +1241,34 @@ def render_service(s, services, posts):
       <li><a href="{pfx(lang)}/services/">{T(lang,'services')}</a></li>
       <li aria-current="page">{esc(s['title'])}</li></ol>
     </nav>
-    <h1>{esc(s['title'])}</h1>
-    <p class="svc-dek">{esc(s.get('description',''))}</p>
-    <p class="svc-actions">
-      <a class="btn btn-primary" href="{pfx(lang)}/contact/">{T(lang,'cta')}</a>
-      <a class="btn btn-outline" href="mailto:{BIZ['email']}">{BIZ['email']}</a>
-    </p>
+    <div class="svc-hero-grid">
+      <div class="svc-hero-main">
+        <h1>{esc(s['title'])}</h1>
+        <p class="svc-dek">{esc(s.get('description',''))}</p>
+        <p class="svc-actions">
+          <a class="btn btn-primary" href="{pfx(lang)}/contact/">{T(lang,'cta')}</a>
+          <a class="btn btn-outline" href="mailto:{BIZ['email']}">{BIZ['email']}</a>
+        </p>
+      </div>
+      {deliver}
+    </div>
   </div>
 </div>
-<div class="wrap wrap-narrow">
-  {deliver}
-  {toc_block(toc, lang)}
-  <div class="prose">{body_html}</div>
-  {resources_block(s, lang)}
-  {faq_block(s, lang)}
-  {sources_block(s, lang)}
-  {cta_band(lang, service=s)}
+<div class="wrap svc-layout">
+  <div class="svc-side">{toc_block(toc, lang, sticky=True)}</div>
+  <div class="svc-main">
+    <div class="prose">{body_html}</div>
+    {resources_block(s, lang)}
+    {faq_block(s, lang)}
+    {sources_block(s, lang)}
+    {cta_band(lang, service=s)}
+  </div>
+</div>
+<div class="wrap">
   {posts_html}
   <section class="related" aria-labelledby="os-h">
-    <h2 id="os-h">{T(lang,'services')}</h2>
-    <div class="grid grid-3">{''.join(service_card(x) for x in others)}</div>
+    <h2 id="os-h" class="section-h">{T(lang,'other_services')}</h2>
+    <div class="grid grid-3 svc-grid">{''.join(service_card(x) for x in others)}</div>
   </section>
 </div>"""
     doc += footer_html(lang, services, posts)
@@ -1260,14 +1323,14 @@ def render_insights_index(lang, posts, services):
                   "them. Every figure is dated and sourced to the authority it came from."),
            "ko": ("한국의 회계·급여·세무·규제 준수에 관한 실무 노트입니다. 모든 수치에 기준 시점과 "
                   "출처 기관을 명시합니다.")}[lang]
-    alternates = {l: f"{pfx(l)}/insights/" for l in LANGS}
-    url = f"{SITE}{pfx(lang)}/insights/"
+    alternates = {l: f"{pfx(l)}/blog/" for l in LANGS}
+    url = f"{SITE}{pfx(lang)}/blog/"
     cats = live_categories(posts, lang)
     cat_nav = "".join(
-        f'<a class="chip" href="{pfx(lang)}/insights/{c["slug"]}/">{esc(c["name"])}</a>'
+        f'<a class="chip" href="{pfx(lang)}/blog/{c["slug"]}/">{esc(c["name"])}</a>'
         for c in cats)
     graph = [org_node(), website_node(lang),
-             breadcrumbs([(T(lang, "home"), pfx(lang) + "/"), (T(lang, "insights"), pfx(lang) + "/insights/")]),
+             breadcrumbs([(T(lang, "home"), pfx(lang) + "/"), (T(lang, "insights"), pfx(lang) + "/blog/")]),
              {"@type": "Blog", "@id": url + "#blog", "url": url, "name": title,
               "description": dek, "inLanguage": LANGS[lang]["hreflang"],
               "publisher": {"@id": SITE + "/#organization"},
@@ -1277,7 +1340,7 @@ def render_insights_index(lang, posts, services):
     doc = head(seo_title({"seo_title": title}, lang), clamp(dek, 158), url, lang=lang,
                og_image=SITE + "/img/logo.png", alternates=alternates,
                jsonld={"@context": "https://schema.org", "@graph": graph})
-    doc += header_html(lang, "insights", alternates)
+    doc += header_html(lang, "blog", alternates)
     grid = "".join(post_card(p, eager=(i == 0)) for i, p in enumerate(items)) or \
         f'<p class="muted">{T(lang,"no_posts")}</p>'
     doc += f"""
@@ -1292,18 +1355,18 @@ def render_insights_index(lang, posts, services):
 </div>
 <div class="wrap"><div class="grid grid-3">{grid}</div>{cta_band(lang)}</div>"""
     doc += footer_html(lang, services, posts)
-    write(os.path.join(DIST, f"{pfx(lang)}/insights".strip("/"), "index.html"), doc)
+    write(os.path.join(DIST, f"{pfx(lang)}/blog".strip("/"), "index.html"), doc)
 
 
 def render_category(c, lang, posts, services):
     items = [p for p in posts if p["lang"] == lang and p["category"] == c["slug"]]
-    url = f"{SITE}{pfx(lang)}/insights/{c['slug']}/"
-    alternates = {l: f"{pfx(l)}/insights/{c['slug']}/" for l in LANGS
+    url = f"{SITE}{pfx(lang)}/blog/{c['slug']}/"
+    alternates = {l: f"{pfx(l)}/blog/{c['slug']}/" for l in LANGS
                   if any(p["lang"] == l and p["category"] == c["slug"] for p in posts)}
     graph = [org_node(), website_node(lang),
              breadcrumbs([(T(lang, "home"), pfx(lang) + "/"),
-                          (T(lang, "insights"), pfx(lang) + "/insights/"),
-                          (c["name"], f"{pfx(lang)}/insights/{c['slug']}/")]),
+                          (T(lang, "insights"), pfx(lang) + "/blog/"),
+                          (c["name"], f"{pfx(lang)}/blog/{c['slug']}/")]),
              {"@type": "CollectionPage", "@id": url + "#webpage", "url": url,
               "name": c["name"], "description": meta_desc(c),
               "isPartOf": {"@id": SITE + "/#website"},
@@ -1315,7 +1378,7 @@ def render_category(c, lang, posts, services):
                meta_desc(c), url, lang=lang, og_image=SITE + "/img/logo.png",
                alternates=alternates,
                jsonld={"@context": "https://schema.org", "@graph": graph})
-    doc += header_html(lang, "insights", alternates)
+    doc += header_html(lang, "blog", alternates)
     grid = "".join(post_card(p, eager=(i == 0)) for i, p in enumerate(items)) or \
         f'<p class="muted">{T(lang,"no_posts")}</p>'
     doc += f"""
@@ -1323,14 +1386,14 @@ def render_category(c, lang, posts, services):
   <div class="wrap">
     <nav class="crumbs" aria-label="{T(lang,'breadcrumb')}"><ol>
       <li><a href="{pfx(lang)}/">{T(lang,'home')}</a></li>
-      <li><a href="{pfx(lang)}/insights/">{T(lang,'insights')}</a></li>
+      <li><a href="{pfx(lang)}/blog/">{T(lang,'insights')}</a></li>
       <li aria-current="page">{esc(c['name'])}</li></ol></nav>
     <h1>{esc(c['name'])}</h1><p class="page-dek">{esc(c['blurb'])}</p>
   </div>
 </div>
 <div class="wrap"><div class="grid grid-3">{grid}</div>{cta_band(lang)}</div>"""
     doc += footer_html(lang, services, posts)
-    write(os.path.join(DIST, f"{pfx(lang)}/insights/{c['slug']}".strip("/"), "index.html"), doc)
+    write(os.path.join(DIST, f"{pfx(lang)}/blog/{c['slug']}".strip("/"), "index.html"), doc)
 
 
 def contact_form(lang):
@@ -1381,6 +1444,8 @@ def render_page(pg, services, posts):
               "dateModified": iso(pg["updated"])}]
     if pg.get("faq"):
         graph.append(faq_node(pg, pg["abs_url"]))
+    if pg["slug"] == "about":
+        graph.extend(person_nodes())
     doc = head(seo_title(pg, lang), meta_desc(pg), pg["abs_url"], lang=lang,
                og_image=SITE + "/img/logo.png", modified=iso(pg["updated"]),
                alternates=pg.get("alternates"),
@@ -1522,7 +1587,7 @@ def render_home(lang, posts, services, pages):
   <section aria-labelledby="latest-h">
     <h2 id="latest-h" class="section-h">{T(lang,'latest')}</h2>
     <div class="grid grid-3">{latest_html}</div>
-    <p class="more"><a href="{pfx(lang)}/insights/">{T(lang,'all_insights')} &rarr;</a></p>
+    <p class="more"><a href="{pfx(lang)}/blog/">{T(lang,'all_insights')} &rarr;</a></p>
   </section>
   {faq_block({"faq": home_faq}, lang)}
 </div>"""
@@ -1603,10 +1668,10 @@ def render_feeds(posts, services, pages):
         urls.append((f"{SITE}{pfx(lang)}/", "weekly", "1.0", today, None, None, alts))
         urls.append((f"{SITE}{pfx(lang)}/services/", "monthly", "0.9", today, None, None,
                      {l: f"{pfx(l)}/services/" for l in LANGS}))
-        urls.append((f"{SITE}{pfx(lang)}/insights/", "daily", "0.8", today, None, None,
-                     {l: f"{pfx(l)}/insights/" for l in LANGS}))
+        urls.append((f"{SITE}{pfx(lang)}/blog/", "daily", "0.8", today, None, None,
+                     {l: f"{pfx(l)}/blog/" for l in LANGS}))
         for c in live_categories(posts, lang):
-            urls.append((f"{SITE}{pfx(lang)}/insights/{c['slug']}/", "daily", "0.7",
+            urls.append((f"{SITE}{pfx(lang)}/blog/{c['slug']}/", "daily", "0.7",
                          today, None, None, None))
     for s in services:
         urls.append((s["abs_url"], "monthly", "0.9", s["updated"],
@@ -1692,7 +1757,7 @@ Sitemap: {SITE}/sitemap.xml
     write(os.path.join(DIST, "rss.xml"), f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>
 <title>{esc(CFG['site_name'])} — Insights</title>
-<link>{SITE}/insights/</link>
+<link>{SITE}/blog/</link>
 <atom:link href="{SITE}/rss.xml" rel="self" type="application/rss+xml"/>
 <description>{esc(CFG['strapline'])}</description>
 <language>en-us</language>

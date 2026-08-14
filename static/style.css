@@ -185,20 +185,72 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 
 /* ────────────────────────────────────────────────────── page/service hero ── */
 .page-hero, .svc-hero { background: var(--mist); border-bottom: 1px solid var(--line); }
-.page-hero > .wrap, .svc-hero > .wrap { padding-block: 2.6rem 2.2rem; }
-.svc-hero { background: var(--navy); }
-.svc-hero h1 { color: #fff; max-width: 22ch; }
-.svc-dek { color: rgba(255, 255, 255, .88); font-size: 1.08rem; max-width: 62ch; }
-.svc-hero .crumbs, .svc-hero .crumbs a { color: rgba(255, 255, 255, .72); }
+.page-hero > .wrap { padding-block: 2.8rem 2.4rem; }
+.svc-hero > .wrap { padding-block: 2rem 3rem; }
+.svc-hero {
+  background: var(--navy);
+  background-image: radial-gradient(ellipse at 78% 18%, rgba(30,171,199,.20), transparent 62%);
+  border-bottom: 0;
+}
+.svc-hero h1 { color: #fff; margin-bottom: .55em; }
+.svc-dek { color: rgba(255, 255, 255, .88); font-size: 1.1rem; line-height: 1.6; }
+.svc-hero .crumbs, .svc-hero .crumbs a { color: rgba(255, 255, 255, .68); }
 .svc-hero .crumbs a:hover { color: #fff; }
-.svc-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
-.page-dek { font-size: 1.06rem; color: var(--ink-soft); max-width: 68ch; }
+.svc-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin: 1.8rem 0 0; }
+
+/* Hero splits: pitch on the left, a scannable "what you get" card on the right.
+   A headline alone left this half of the fold empty. */
+.svc-hero-grid {
+  display: grid; grid-template-columns: 1.25fr 1fr;
+  gap: 3rem; align-items: start; margin-top: 1.5rem;
+}
+.svc-summary {
+  background: rgba(255, 255, 255, .07);
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: var(--radius); padding: 1.4rem 1.5rem;
+  backdrop-filter: blur(2px);
+}
+.svc-summary h2 {
+  color: var(--sky); font-size: .74rem; letter-spacing: .13em;
+  text-transform: uppercase; margin-bottom: .9rem;
+}
+.svc-summary ul { list-style: none; padding: 0; margin: 0; }
+.svc-summary li {
+  position: relative; padding-left: 1.5rem; margin-bottom: .55rem;
+  font-size: .9rem; color: rgba(255, 255, 255, .9); line-height: 1.45;
+}
+.svc-summary li::before {
+  content: "\2713"; position: absolute; left: 0; top: 0;
+  color: var(--cyan); font-weight: 700;
+}
+
+/* Article + sticky contents. The service pages run to 3,000 words; a sidebar
+   index is the difference between scanning and scrolling blind. */
+.svc-layout {
+  display: grid; grid-template-columns: 240px minmax(0, 1fr);
+  gap: 3.5rem; align-items: start; padding-block: 3rem;
+}
+.svc-side { position: relative; }
+.toc-sticky { position: sticky; top: 100px; margin: 0; border: 0; padding: 0; background: none; }
+.toc-sticky h2 { margin-bottom: .8rem; }
+.toc-sticky ul { border-left: 2px solid var(--line); }
+.toc-sticky li { margin: 0; }
+.toc-sticky a {
+  display: block; padding: .4rem .9rem; margin-left: -2px;
+  border-left: 2px solid transparent; font-size: .88rem;
+  color: var(--ink-soft); line-height: 1.4;
+}
+.toc-sticky a:hover { color: var(--navy); border-left-color: var(--sky); text-decoration: none; }
+.svc-main { min-width: 0; }
+.svc-main > .prose > h2:first-child { margin-top: 0; }
+
+.page-dek { font-size: 1.08rem; color: var(--ink-soft); max-width: 68ch; }
 
 .section-h {
-  margin: 3.2rem 0 1.4rem;
-  padding-bottom: .6rem; border-bottom: 2px solid var(--pale);
+  margin: 3.4rem 0 1.5rem;
+  padding-bottom: .7rem; border-bottom: 2px solid var(--pale);
 }
-.more { margin-top: 1.5rem; font-weight: 600; }
+.more { margin-top: 1.5rem; font-weight: 700; }
 
 /* ────────────────────────────────────────────────────────── breadcrumbs ── */
 .crumbs { font-size: .82rem; color: var(--ink-soft); margin-bottom: 1rem; }
@@ -217,7 +269,10 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   border-radius: var(--radius); padding: 1.7rem 1.6rem 1.5rem;
   display: flex; flex-direction: column; transition: .18s ease;
 }
-.svc-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-top-color: var(--cyan); }
+.svc-card:hover {
+  box-shadow: var(--shadow-lg); transform: translateY(-3px);
+  border-top-color: var(--cyan); border-top-width: 4px;
+}
 .svc-card h3 { font-size: 1.22rem; margin-bottom: .5rem; }
 .svc-card h3 a { color: var(--navy); text-decoration: none; }
 .svc-card h3 a:hover { color: var(--blue); }
@@ -276,9 +331,14 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .hero { margin: 2rem 0; }
 .hero img { width: 100%; display: block; border-radius: var(--radius); }
 
-.prose { font-size: 1.03rem; }
-.prose h2 { margin-top: 2.4rem; }
-.prose h3 { margin-top: 1.8rem; color: var(--slate); }
+.prose { font-size: 1.06rem; line-height: 1.72; max-width: 68ch; }
+.prose > h2 {
+  margin-top: 3rem; padding-top: 1.6rem;
+  border-top: 1px solid var(--line);
+}
+.prose > h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.prose h3 { margin-top: 2rem; color: var(--slate); }
+.prose strong { color: var(--slate); }
 .prose ul, .prose ol { padding-left: 1.3rem; margin-bottom: 1.2em; }
 .prose li { margin-bottom: .45em; }
 .prose blockquote {
@@ -319,22 +379,33 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 }
 
 .callout {
-  margin: 1.7rem 0; padding: 1.1rem 1.3rem;
+  margin: 2rem 0; padding: 1.2rem 1.4rem;
   border-radius: var(--radius); border: 1px solid var(--line);
   border-left: 4px solid var(--blue); background: #fff;
 }
 .callout-h {
-  font-weight: 700; margin: 0 0 .5rem; font-size: .92rem;
-  display: flex; align-items: center; gap: .5rem; color: var(--navy);
+  font-weight: 700; margin: 0 0 .55rem; font-size: .93rem;
+  display: flex; align-items: center; gap: .6rem; color: var(--navy);
+}
+/* The icon sits in its own tinted disc. Left bare it reads as a list bullet,
+   which is exactly the wrong signal for a highlighted aside. */
+.callout-icon {
+  flex: none; width: 22px; height: 22px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--pale); color: var(--navy); font-size: .72rem; line-height: 1;
 }
 .callout p:last-child { margin-bottom: 0; }
 .callout-key { border-left-color: var(--navy); background: var(--mist); }
 .callout-tip { border-left-color: var(--cyan); background: #F2FBFD; }
+.callout-tip .callout-icon { background: #CFF0F7; color: #0A6E82; }
 .callout-warning { border-left-color: #D98324; background: #FDF7EF; }
 .callout-warning .callout-h { color: #8A4E08; }
+.callout-warning .callout-icon { background: #F7E2C4; color: #8A4E08; }
 .callout-deadline { border-left-color: #C0392B; background: #FDF3F2; }
 .callout-deadline .callout-h { color: #96271A; }
+.callout-deadline .callout-icon { background: #F7D6D2; color: #96271A; }
 .callout-action { border-left-color: var(--blue); background: #F4F8FB; }
+.callout-action .callout-icon { background: #D8E6F1; color: var(--blue); }
 .callout-note { border-left-color: var(--sky); background: var(--mist); }
 
 /* ───────────────────────────────────────────────── toc / faq / sources ── */
@@ -441,9 +512,11 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 
 /* ────────────────────────────────────────────────────────────── footer ── */
 .site-footer { background: var(--navy-deep); color: rgba(255, 255, 255, .8); margin-top: 4rem; }
+/* Three columns, not five. Services and Insights had columns here; the header
+   already carries both, and five link columns is what makes a footer unreadable. */
 .footer-grid {
-  display: grid; gap: 2rem; padding-block: 3rem 2rem;
-  grid-template-columns: 2.2fr 1fr 1fr 1fr 1fr;
+  display: grid; gap: 3rem; padding-block: 3.2rem 2rem;
+  grid-template-columns: 2.4fr 1fr 1fr;
 }
 .footer-brand-col .muted { color: rgba(255, 255, 255, .68); font-size: .9rem; }
 .footer-brand {
@@ -473,8 +546,21 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .footer-bottom a { color: var(--sky); }
 
 /* ────────────────────────────────────────────────────────────── mobile ── */
+@media (max-width: 1040px) {
+  /* The sticky index needs a viewport tall and wide enough to be worth the
+     column. Below this it becomes a normal block above the article. */
+  .svc-layout { grid-template-columns: 1fr; gap: 0; padding-block: 2.2rem; }
+  .toc-sticky {
+    position: static; background: var(--mist); padding: 1.2rem 1.4rem;
+    border-radius: var(--radius); margin-bottom: 2rem;
+  }
+  .toc-sticky ul { border-left: 0; }
+  .toc-sticky a { padding: .3rem 0; border-left: 0; }
+  .svc-hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+
 @media (max-width: 900px) {
-  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
   .footer-brand-col { grid-column: 1 / -1; }
   .cta-inner { grid-template-columns: 1fr; }
   .stats-row { grid-template-columns: 1fr; gap: 1rem; }

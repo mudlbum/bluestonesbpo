@@ -73,7 +73,7 @@ Every professional services firm claims integrity. Ours is testable, because it 
 - We hand over cleanly. Your books, your files, your access. Outsourcing that is difficult to
   exit is not a service, it is a lock-in.
 - We publish what we know, with the source and the date attached, on
-  [our insights pages](/insights/) — and we correct it when it changes.
+  [our blog](/blog/) — and we correct it when it changes.
 
 ## Our professionals
 

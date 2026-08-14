@@ -208,7 +208,10 @@ def main():
             for node in data.get("@graph", []):
                 types = node.get("@type")
                 types = types if isinstance(types, list) else [types]
-                if "Organization" in types:
+                # Only the primary business entity needs a full NAP. Articles also
+                # carry an Organization node for the editorial desk, which is a
+                # sub-organization of it and has no separate address or phone.
+                if "Organization" in types and str(node.get("@id", "")).endswith("#organization"):
                     addr = node.get("address") or {}
                     for k in ("streetAddress", "addressLocality", "addressCountry"):
                         if not addr.get(k):
@@ -264,8 +267,8 @@ def main():
     articles = []
     for f in pages:
         parts = os.path.relpath(f, DIST).split(os.sep)
-        if "insights" in parts and parts[-1] == "index.html" and \
-                parts.index("insights") + 2 < len(parts) - 1:
+        if "blog" in parts and parts[-1] == "index.html" and \
+                parts.index("blog") + 2 < len(parts) - 1:
             articles.append(f)
 
     if not articles:
