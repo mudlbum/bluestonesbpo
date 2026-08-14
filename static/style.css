@@ -231,16 +231,22 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   gap: 3.5rem; align-items: start; padding-block: 3rem;
 }
 .svc-side { position: relative; }
-.toc-sticky { position: sticky; top: 100px; margin: 0; border: 0; padding: 0; background: none; }
-.toc-sticky h2 { margin-bottom: .8rem; }
-.toc-sticky ul { border-left: 2px solid var(--line); }
-.toc-sticky li { margin: 0; }
-.toc-sticky a {
+/* Doubled class for specificity: the generic .toc card rule is defined later in
+   this file, and at equal specificity the later rule wins — which put a white
+   card back around the rail. */
+.toc.toc-sticky {
+  position: sticky; top: 100px; margin: 0;
+  border: 0; padding: 0; background: none; border-radius: 0;
+}
+.toc.toc-sticky h2 { margin-bottom: .8rem; }
+.toc.toc-sticky ul { border-left: 2px solid var(--line); }
+.toc.toc-sticky li { margin: 0; }
+.toc.toc-sticky a {
   display: block; padding: .4rem .9rem; margin-left: -2px;
   border-left: 2px solid transparent; font-size: .88rem;
   color: var(--ink-soft); line-height: 1.4;
 }
-.toc-sticky a:hover { color: var(--navy); border-left-color: var(--sky); text-decoration: none; }
+.toc.toc-sticky a:hover { color: var(--navy); border-left-color: var(--sky); text-decoration: none; }
 .svc-main { min-width: 0; }
 .svc-main > .prose > h2:first-child { margin-top: 0; }
 
@@ -328,8 +334,14 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   padding: .9rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
   margin-top: 1.2rem;
 }
-.hero { margin: 2rem 0; }
-.hero img { width: 100%; display: block; border-radius: var(--radius); }
+/* Article banner. Left full-bleed at 16:9 this is ~850px tall on a desktop —
+   a whole viewport of decoration before the reader reaches a sentence. Capped
+   to a banner, cropped from the centre where the cover art puts its figure. */
+.hero { margin: 2rem auto 2.5rem; max-width: var(--wrap); padding-inline: 20px; }
+.hero img {
+  width: 100%; display: block; border-radius: var(--radius);
+  max-height: 380px; object-fit: cover; object-position: center;
+}
 
 .prose { font-size: 1.06rem; line-height: 1.72; max-width: 68ch; }
 .prose > h2 {
@@ -550,12 +562,12 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   /* The sticky index needs a viewport tall and wide enough to be worth the
      column. Below this it becomes a normal block above the article. */
   .svc-layout { grid-template-columns: 1fr; gap: 0; padding-block: 2.2rem; }
-  .toc-sticky {
+  .toc.toc-sticky {
     position: static; background: var(--mist); padding: 1.2rem 1.4rem;
     border-radius: var(--radius); margin-bottom: 2rem;
   }
-  .toc-sticky ul { border-left: 0; }
-  .toc-sticky a { padding: .3rem 0; border-left: 0; }
+  .toc.toc-sticky ul { border-left: 0; }
+  .toc.toc-sticky a { padding: .3rem 0; border-left: 0; }
   .svc-hero-grid { grid-template-columns: 1fr; gap: 2rem; }
 }
 
