@@ -22,7 +22,7 @@ key_takeaways:
   - text: "Payment is due within **14 days** of leaving, extendable only by agreement between the parties in extraordinary circumstances."
     source: 1
   - text: "Average wage is total wages over the **3** calendar months before leaving, divided by the calendar days in that period — not monthly base salary."
-    source: [2, 3]
+    source: 3
 
 faq:
   - q: "Do I have to pay severance in Korea if the employee quits?"
@@ -63,12 +63,12 @@ sources:
     publisher: "Korea Legislation Research Institute"
     accessed: 2026-08-14
     primary: true
-  - title: "Labor Standards Act — Article 2, definition of average wage"
+  - title: "Labor Standards — policy overview, including the Retirement Pension System (DB and DC)"
     url: "https://www.moel.go.kr/english/policy/laborStandards.do"
     publisher: "Ministry of Employment and Labor"
     accessed: 2026-08-14
     primary: true
-  - title: "Labor Laws in Korea (KOTRA 25-013)"
+  - title: "Labor Laws in Korea 2025 (KOTRA 25-013) — definition and use of average wage"
     url: "https://www.investkorea.org/file/ik-en/252025Labor_Laws_in_Korea.pdf"
     publisher: "Invest KOREA / KOTRA"
     accessed: 2026-08-14

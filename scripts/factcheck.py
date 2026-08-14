@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fact-check gate for Future of Korea.
+Fact-check gate for Bluestones BPO.
 
 Every quotable statistic must be traceable to a named primary source that was
 alive when the post was built. This module is the machine-readable half of the
@@ -58,7 +58,22 @@ MIN_PRIMARY = 1
 MAX_SOURCE_AGE_DAYS = 400
 MIN_QUANTIFIED = 0.6   # share of takeaways that must carry a figure
 URL_TIMEOUT = 12
-USER_AGENT = "futureofkorea-linkcheck/1.0 (+https://futureofkorea.com/)"
+USER_AGENT = "bluestonesbpo-linkcheck/1.0 (+https://www.bluestonesbpo.com/)"
+
+# Seoul time, not the machine's time.
+#
+# The publication operates on KST and dates its figures in KST. CI runners are on
+# UTC, which is nine hours behind — so for the first nine hours of every Korean
+# day, a post written today looks like it was accessed "in the future" to a UTC
+# runner and the build fails. The daily publishing task runs at 09:00 KST, which
+# lands squarely inside that window, so this would have broken every single
+# scheduled post rather than being an occasional edge case.
+KST = dt.timezone(dt.timedelta(hours=9))
+
+
+def today() -> dt.date:
+    """The current date in the publication's own timezone."""
+    return dt.datetime.now(KST).date()
 
 # A "figure" is a bolded span containing a digit, or a bolded span containing a
 # number written as a word. Both are quantitative claims; only the typography differs.
@@ -119,7 +134,7 @@ def check_structure(name: str, meta: dict) -> list[Finding]:
 
     sources = meta.get("sources") or []
     takeaways = meta.get("key_takeaways") or []
-    post_date = _as_date(meta.get("date")) or dt.date.today()
+    post_date = _as_date(meta.get("date")) or today()
 
     if len(sources) < MIN_SOURCES:
         f.append(Finding(name, f"only {len(sources)} source(s) — at least {MIN_SOURCES} required"))
@@ -140,7 +155,7 @@ def check_structure(name: str, meta: dict) -> list[Finding]:
         if accessed is None:
             f.append(Finding(name, f"source [{i}] has no valid `accessed` date (YYYY-MM-DD)"))
         else:
-            if accessed > dt.date.today():
+            if accessed > today():
                 f.append(Finding(name, f"source [{i}] `accessed` is in the future ({accessed})"))
             age = (post_date - accessed).days
             if age > MAX_SOURCE_AGE_DAYS:
@@ -276,7 +291,7 @@ def run(offline: bool = False) -> tuple[list[Finding], list[Finding]]:
     legacy: list[Finding] = []
     for name, meta in posts:
         found = check_structure(name, meta)
-        post_date = _as_date(meta.get("date")) or dt.date.today()
+        post_date = _as_date(meta.get("date")) or today()
         (legacy if post_date < cutoff else findings).extend(found)
 
     if offline:
@@ -284,7 +299,7 @@ def run(offline: bool = False) -> tuple[list[Finding], list[Finding]]:
     elif not online():
         print("  note: no network available, skipping source URL liveness checks")
     else:
-        current = {n for n, m in posts if (_as_date(m.get("date")) or dt.date.today()) >= cutoff}
+        current = {n for n, m in posts if (_as_date(m.get("date")) or today()) >= cutoff}
         for f in check_urls(posts):
             (findings if f.post in current else legacy).append(f)
     return findings, legacy
