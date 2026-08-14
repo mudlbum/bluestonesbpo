@@ -38,7 +38,7 @@ CFG = json.load(open(os.path.join(ROOT, "site.config.json"), encoding="utf-8"))
 REQUIRED_PAGES = ["about", "contact", "privacy-policy", "cookie-policy",
                   "terms", "disclaimer", "editorial-policy"]
 REQUIRED_FILES = ["index.html", "404.html", "sitemap.xml", "robots.txt",
-                  "rss.xml", "llms.txt", "style.css", "favicon.svg", "CNAME"]
+                  "rss.xml", "llms.txt", "style.css", "favicon.svg"]
 FORBIDDEN = ["lorem ipsum", "TODO:", "FIXME", "XXXX", "{{", "[INSERT", "TK TK",
              "As an AI language model", "placeholder text", "Lorem Ipsum"]
 
@@ -51,6 +51,19 @@ BAD_ROBOTS = ("noindex", "nofollow", "nosnippet", "noimageindex", "noarchive")
 # rather than forbidden. The gate checks for the opposite defect in that mode —
 # a staging build that forgot to suppress indexing.
 IS_STAGING = bool((CFG.get("staging") or {}).get("enabled"))
+
+# Sub-path the site is served from, derived the same way build.py derives it.
+# On a GitHub Pages project site every internal link carries this prefix, so it
+# has to come back off before a link is resolved against the output directory.
+_SITE = ((CFG.get("staging") or {}).get("domain") if IS_STAGING
+         else CFG["domain"]).rstrip("/")
+_rest = _SITE.partition("://")[2]
+BASE = ("/" + _rest.partition("/")[2].strip("/")) if "/" in _rest else ""
+BASE = "" if BASE == "/" else BASE
+
+# CNAME belongs to a site that owns a hostname, not to a project page.
+if not BASE:
+    REQUIRED_FILES.append("CNAME")
 
 errors: list[str] = []
 warnings: list[str] = []
@@ -119,8 +132,15 @@ def main():
 
         # ── internal references resolve ───────────────────────────────────────
         for ref in re.findall(r'(?:href|src)="(/[^"#?]*)"', h):
-            target = os.path.join(DIST, ref.lstrip("/"))
-            if ref.endswith("/"):
+            path = ref
+            if BASE:
+                if not path.startswith(BASE + "/") and path != BASE:
+                    err(f"{rel}: internal link {ref} is missing the {BASE} base path — "
+                        "it will 404 on a project page")
+                    continue
+                path = path[len(BASE):] or "/"
+            target = os.path.join(DIST, path.lstrip("/"))
+            if path.endswith("/"):
                 target = os.path.join(target, "index.html")
             if not os.path.exists(target):
                 err(f"{rel}: broken internal reference -> {ref}")

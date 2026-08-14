@@ -60,6 +60,16 @@ STAGING = CFG.get("staging") or {}
 IS_STAGING = bool(STAGING.get("enabled"))
 SITE = (STAGING.get("domain") if IS_STAGING else CFG["domain"]).rstrip("/")
 
+# BASE is the sub-path the site is served from, empty when it sits at a domain
+# root. A GitHub Pages project site lives at user.github.io/<repo>/, so every
+# root-relative link ("/services/", "/style.css") would 404 there. Rather than
+# thread a prefix through every template and every markdown link, the base is
+# derived once from the domain and applied as a single rewrite in write(),
+# which also catches links written by hand in content files.
+_scheme, _, _rest = SITE.partition("://")
+BASE = ("/" + _rest.partition("/")[2].strip("/")) if "/" in _rest else ""
+BASE = "" if BASE == "/" else BASE
+
 ROBOTS_DEFAULT = ("noindex,nofollow" if IS_STAGING else
                   "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1")
 
@@ -280,7 +290,22 @@ def esc(s) -> str:
     return html.escape(str(s or ""), quote=True)
 
 
+_REBASE = re.compile(r'\b(href|src)="/(?!/)')
+
+
+def rebase(html: str) -> str:
+    """Prefix every root-relative URL with BASE. No-op when BASE is empty.
+
+    Matches href/src starting with a single slash, which is exactly the set of
+    internal links. Protocol-relative ("//cdn…"), absolute ("https://…") and
+    fragment ("#faq") URLs are left alone.
+    """
+    return _REBASE.sub(rf'\1="{BASE}/', html) if BASE else html
+
+
 def write(path: str, content: str):
+    if BASE and path.endswith(".html"):
+        content = rebase(content)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
@@ -1721,9 +1746,9 @@ Sitemap: {SITE}/sitemap.xml
 <polygon points="35,18 20,23 20,38" fill="#2E5F86"/></svg>""")
 
     write(os.path.join(DIST, "manifest.webmanifest"), json.dumps({
-        "name": CFG["site_name"], "short_name": "Bluestones", "start_url": "/",
+        "name": CFG["site_name"], "short_name": "Bluestones", "start_url": BASE + "/",
         "display": "standalone", "background_color": b["navy"], "theme_color": b["navy"],
-        "icons": [{"src": "/img/logo.png", "sizes": "512x512", "type": "image/png"}]}))
+        "icons": [{"src": BASE + "/img/logo.png", "sizes": "512x512", "type": "image/png"}]}))
 
 
 # ──────────────────────────────────────────────────────────────── build ──
@@ -1795,7 +1820,13 @@ def build():
     except Exception as e:                      # noqa: BLE001
         print(f"  topic index skipped ({type(e).__name__}: {e})")
 
-    write(os.path.join(DIST, "CNAME"), SITE.split("//")[1] + "\n")
+    # A CNAME file only makes sense when the site owns a whole hostname. On a
+    # project page the host belongs to github.io, and writing one there makes
+    # Pages redirect to a domain that does not exist.
+    if BASE:
+        print(f"→ serving from sub-path {BASE}/ — no CNAME written")
+    else:
+        write(os.path.join(DIST, "CNAME"), SITE.split("//")[1] + "\n")
     write(os.path.join(DIST, ".nojekyll"), "")
     print(f"✓ built → {DIST}")
     return posts, services, pages
