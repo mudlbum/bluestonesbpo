@@ -76,7 +76,19 @@
       "credential": "Korean Certified Public Accountant (KICPA)",
       "affiliation": "WITH Accounting Firm",
       "alumni": "Korea University",
-      "knows_about": ["International tax", "Korean corporate income tax", "Transfer pricing", "Tax treaty relief"]
+      "knows_about": [
+        "International tax",
+        "Korean corporate income tax",
+        "Transfer pricing",
+        "Tax treaty relief"
+      ],
+      "name_ko": "김우정",
+      "job_title_ko": "국제조세·한국조세 전문",
+      "credential_ko": "한국공인회계사 (KICPA)",
+      "affiliation_ko": "WITH회계법인",
+      "alumni_ko": "고려대학교",
+      "background": "Previously Deloitte Anjin",
+      "background_ko": "前 딜로이트 안진회계법인"
     },
     {
       "name": "Brian H. Morikuni",
@@ -84,7 +96,18 @@
       "credential": "",
       "affiliation": "",
       "alumni": "University of Hawaii at Manoa",
-      "knows_about": ["Cross-border entity management", "Corporate governance", "Business process outsourcing"]
+      "knows_about": [
+        "Cross-border entity management",
+        "Corporate governance",
+        "Business process outsourcing"
+      ],
+      "name_ko": "Brian H. Morikuni",
+      "job_title_ko": "General Manager",
+      "credential_ko": "",
+      "affiliation_ko": "",
+      "alumni_ko": "University of Hawaii at Manoa",
+      "background": "Managing Director of entities in the UK, Ireland, Bermuda, the Cayman Islands, Hong Kong and Korea",
+      "background_ko": "영국·아일랜드·버뮤다·케이맨 제도·홍콩·한국 소재 법인 대표 역임"
     },
     {
       "name": "Jaeeun Kim",
@@ -92,7 +115,18 @@
       "credential": "",
       "affiliation": "Soma Development",
       "alumni": "",
-      "knows_about": ["Foreign-invested company registration", "Korea market entry", "Commercial operations"]
+      "knows_about": [
+        "Foreign-invested company registration",
+        "Korea market entry",
+        "Commercial operations"
+      ],
+      "name_ko": "김재은",
+      "job_title_ko": "한국 사업 설립 전문",
+      "credential_ko": "",
+      "affiliation_ko": "Soma Development",
+      "alumni_ko": "",
+      "background": "Previously Google, Amazon and WeWork",
+      "background_ko": "前 Google, Amazon, WeWork"
     },
     {
       "name": "Steve S. Shin",
@@ -100,10 +134,20 @@
       "credential": "",
       "affiliation": "",
       "alumni": "Wharton School, University of Pennsylvania",
-      "knows_about": ["Financial modelling", "Business strategy", "Unit economics"]
+      "knows_about": [
+        "Financial modelling",
+        "Business strategy",
+        "Unit economics"
+      ],
+      "name_ko": "신승수",
+      "job_title_ko": "비즈니스 모델링 전문",
+      "credential_ko": "",
+      "affiliation_ko": "",
+      "alumni_ko": "Wharton School, University of Pennsylvania",
+      "background": "Previously McKinsey & Company",
+      "background_ko": "前 McKinsey & Company"
     }
   ],
-
   "contact": {
     "form_endpoint": "",
     "form_note": "Set this to a Formspree/Basin/Web3Forms endpoint. Until it is set the form degrades to a mailto: link, which still works.",

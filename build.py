@@ -92,6 +92,8 @@ STR = {
         "insights": "Blog",
         "other_services": "Other services",
         "included": "What's included",
+        "browse_topic": "Browse by topic",
+        "more_articles": "More articles",
         "contact": "Contact",
         "about": "About",
         "cta": "Book a consultation",
@@ -142,6 +144,8 @@ STR = {
         "insights": "블로그",
         "other_services": "다른 서비스",
         "included": "제공 범위",
+        "browse_topic": "주제별로 보기",
+        "more_articles": "다른 글",
         "contact": "문의",
         "about": "회사 소개",
         "cta": "상담 신청",
@@ -710,9 +714,23 @@ def logo_svg(cls="brand-mark"):
 
 
 def header_html(lang, active="", alternates=None):
+    """`active` is the current page's path, e.g. "/services/payroll-outsourcing/".
+
+    Exactly one nav item is marked current: the one whose URL is the longest
+    prefix of that path. Matching on the first path segment instead lit up both
+    "Services" and "Company Setup" on every service page, because
+    /services/company-registration/ starts with /services/ — two underlines, and
+    no signal about where you actually are.
+    """
+    best = ""
+    for n in CFG["nav"]:
+        u = n["url"]
+        if (active == u or active.startswith(u)) and len(u) > len(best):
+            best = u
+
     def _link(n):
         url = pfx(lang) + n["url"]
-        cur = ' aria-current="page"' if n["url"].strip("/").split("/")[0] == active else ""
+        cur = ' aria-current="page"' if n["url"] == best else ""
         label = n.get("label_" + lang, n["label"])
         return f'<a href="{url}"{cur}>{esc(label)}</a>'
 
@@ -896,6 +914,54 @@ def author_node():
     }
 
 
+def team_cards(lang):
+    """The professionals, as cards rather than a run of bold lines in the prose.
+
+    Rendered from the same `team` block in site.config.json that produces the
+    Person JSON-LD, so what a reader sees and what a search engine reads cannot
+    drift apart. Initials stand in for photographs — inventing headshots for real
+    named people is not an option, and a consistent monogram reads better than a
+    stock portrait that obviously is not them.
+    """
+    def one(t):
+        name = t.get(f"name_{lang}") or t["name"]
+        role = t.get(f"job_title_{lang}") or t["job_title"]
+        cred = t.get(f"credential_{lang}", t.get("credential", ""))
+        aff = t.get(f"affiliation_{lang}", t.get("affiliation", ""))
+        alum = t.get(f"alumni_{lang}", t.get("alumni", ""))
+        back = t.get(f"background_{lang}") or t.get("background", "")
+        # Initials from the Latin name so Korean and English cards match visually.
+        parts = [p for p in re.split(r"\s+", t["name"]) if p and p[0].isalpha()]
+        initials = (parts[0][0] + (parts[-1][0] if len(parts) > 1 else "")).upper()
+
+        meta = []
+        if cred:
+            meta.append(f'<li class="tm-cred">{esc(cred)}</li>')
+        if aff:
+            meta.append(f"<li>{esc(aff)}</li>")
+        if back:
+            meta.append(f"<li>{esc(back)}</li>")
+        if alum:
+            meta.append(f'<li class="tm-alum">{esc(alum)}</li>')
+
+        return f"""<article class="tm-card">
+  <div class="tm-head">
+    <span class="tm-avatar" aria-hidden="true">{initials}</span>
+    <div>
+      <h3>{esc(name)}</h3>
+      <p class="tm-role">{esc(role)}</p>
+    </div>
+  </div>
+  <ul class="tm-meta">{''.join(meta)}</ul>
+</article>"""
+
+    heading = {"en": "Our professionals", "ko": "구성원"}[lang]
+    return (f'<section class="team" aria-labelledby="team-h">'
+            f'<h2 id="team-h">{esc(heading)}</h2>'
+            f'<div class="team-grid">{"".join(one(t) for t in CFG.get("team", []))}</div>'
+            f"</section>")
+
+
 def person_nodes():
     """Named professionals, marked up as Person entities.
 
@@ -965,6 +1031,24 @@ def post_card(p, *, eager=False, size="md"):
     <a class="chip" href="{pfx(p['lang'])}/blog/{p['category']}/">{esc(c.get('name', p['category']))}</a>
     <h3 class="card-title"><a href="{p['url']}">{esc(p['title'])}</a></h3>
     <p class="card-dek">{esc(p.get('description', ''))}</p>
+    <p class="card-meta"><time datetime="{iso(p['date'])}">{pretty_date(p['date'], p['lang'])}</time>
+      <span aria-hidden="true">·</span> {p['reading_time']} {T(p['lang'],'min_read')}</p>
+  </div>
+</article>"""
+
+
+def feature_card(p):
+    """The lead article: image left, text right, full content width."""
+    c = CATS.get(p["category"], {})
+    return f"""<article class="feature">
+  <a class="feature-media" href="{p['url']}" tabindex="-1" aria-hidden="true">
+    <img src="/img/{p['slug']}-hero.webp" alt="" width="1600" height="900"
+         loading="eager" fetchpriority="high">
+  </a>
+  <div class="feature-body">
+    <a class="chip" href="{pfx(p['lang'])}/blog/{p['category']}/">{esc(c.get('name', p['category']))}</a>
+    <h2 class="feature-title"><a href="{p['url']}">{esc(p['title'])}</a></h2>
+    <p class="feature-dek">{esc(p.get('description', ''))}</p>
     <p class="card-meta"><time datetime="{iso(p['date'])}">{pretty_date(p['date'], p['lang'])}</time>
       <span aria-hidden="true">·</span> {p['reading_time']} {T(p['lang'],'min_read')}</p>
   </div>
@@ -1114,7 +1198,7 @@ def render_post(p, all_posts, services):
                published=iso(p["date"]), modified=iso(p["updated"]),
                alternates=p.get("alternates"),
                jsonld={"@context": "https://schema.org", "@graph": graph})
-    doc += header_html(lang, "blog", p.get("alternates"))
+    doc += header_html(lang, f"/blog/{p['category']}/{p['slug']}/", p.get("alternates"))
     upd = ("" if str(p["updated"]) == str(p["date"]) else
            f'<span aria-hidden="true">·</span><time datetime="{iso(p["updated"])}">'
            f'{T(lang,"updated")} {pretty_date(p["updated"], lang)}</time>')
@@ -1221,7 +1305,7 @@ def render_service(s, services, posts):
                og_type="website", modified=iso(s["updated"]),
                alternates=s.get("alternates"),
                jsonld={"@context": "https://schema.org", "@graph": graph})
-    doc += header_html(lang, "services", s.get("alternates"))
+    doc += header_html(lang, f"/services/{s['slug']}/", s.get("alternates"))
 
     # The deliverables list moves into the hero as a summary card. It answers
     # "what do I actually get" before the reader commits to 3,000 words, and it
@@ -1297,7 +1381,7 @@ def render_services_index(lang, services, posts):
     doc = head(seo_title({"seo_title": title}, lang),
                clamp(dek, 158), url, lang=lang, og_image=SITE + "/img/logo.png",
                alternates=alternates, jsonld={"@context": "https://schema.org", "@graph": graph})
-    doc += header_html(lang, "services", alternates)
+    doc += header_html(lang, "/services/", alternates)
     doc += f"""
 <div class="page-hero">
   <div class="wrap">
@@ -1317,8 +1401,13 @@ def render_services_index(lang, services, posts):
 
 def render_insights_index(lang, posts, services):
     items = [p for p in posts if p["lang"] == lang]
-    title = {"en": "Korea Payroll, Tax & Accounting Insights",
-             "ko": "한국 회계·급여·세무 인사이트"}[lang]
+    # The H1 is the plain word, not a keyword string. "Korea Payroll, Tax &
+    # Accounting Insights" as a headline reads like a meta tag that escaped onto
+    # the page; the keywords live in seo_title and the standfirst, which is where
+    # they actually do the work.
+    title = {"en": "Blog", "ko": "블로그"}[lang]
+    seo = {"en": "Korea Payroll, Tax & Accounting Blog",
+           "ko": "한국 회계·급여·세무 블로그"}[lang]
     dek = {"en": ("Notes on Korean payroll, tax, accounting and compliance from the team that files "
                   "them. Every figure is dated and sourced to the authority it came from."),
            "ko": ("한국의 회계·급여·세무·규제 준수에 관한 실무 노트입니다. 모든 수치에 기준 시점과 "
@@ -1326,9 +1415,14 @@ def render_insights_index(lang, posts, services):
     alternates = {l: f"{pfx(l)}/blog/" for l in LANGS}
     url = f"{SITE}{pfx(lang)}/blog/"
     cats = live_categories(posts, lang)
-    cat_nav = "".join(
-        f'<a class="chip" href="{pfx(lang)}/blog/{c["slug"]}/">{esc(c["name"])}</a>'
-        for c in cats)
+    # A filter row listing a single topic is not a filter, it is a stray tag.
+    cat_nav = ""
+    if len(cats) > 1:
+        chips = "".join(
+            f'<a class="chip" href="{pfx(lang)}/blog/{c["slug"]}/">{esc(c["name"])}</a>'
+            for c in cats)
+        cat_nav = (f'<div class="topic-filter"><span class="topic-label">'
+                   f'{T(lang,"browse_topic")}</span><div class="chip-row">{chips}</div></div>')
     graph = [org_node(), website_node(lang),
              breadcrumbs([(T(lang, "home"), pfx(lang) + "/"), (T(lang, "insights"), pfx(lang) + "/blog/")]),
              {"@type": "Blog", "@id": url + "#blog", "url": url, "name": title,
@@ -1337,12 +1431,22 @@ def render_insights_index(lang, posts, services):
               "blogPost": [{"@type": "BlogPosting", "@id": p["abs_url"] + "#article",
                             "headline": p["title"], "url": p["abs_url"],
                             "datePublished": iso(p["date"])} for p in items[:30]]}]
-    doc = head(seo_title({"seo_title": title}, lang), clamp(dek, 158), url, lang=lang,
+    doc = head(seo_title({"seo_title": seo}, lang), clamp(dek, 158), url, lang=lang,
                og_image=SITE + "/img/logo.png", alternates=alternates,
                jsonld={"@context": "https://schema.org", "@graph": graph})
-    doc += header_html(lang, "blog", alternates)
-    grid = "".join(post_card(p, eager=(i == 0)) for i, p in enumerate(items)) or \
-        f'<p class="muted">{T(lang,"no_posts")}</p>'
+    doc += header_html(lang, "/blog/", alternates)
+
+    # Newest post leads at full width, the rest follow in a grid. A single post
+    # in an auto-fill grid renders as one narrow card marooned on the left; as a
+    # lead it reads deliberate, and it still looks right at twenty posts.
+    body = f'<p class="muted">{T(lang,"no_posts")}</p>'
+    if items:
+        lead, rest = items[0], items[1:]
+        body = feature_card(lead)
+        if rest:
+            body += (f'<h2 class="section-h">{T(lang,"more_articles")}</h2>'
+                     f'<div class="grid grid-3">'
+                     f'{"".join(post_card(p) for p in rest)}</div>')
     doc += f"""
 <div class="page-hero">
   <div class="wrap">
@@ -1350,10 +1454,10 @@ def render_insights_index(lang, posts, services):
       <li><a href="{pfx(lang)}/">{T(lang,'home')}</a></li>
       <li aria-current="page">{T(lang,'insights')}</li></ol></nav>
     <h1>{esc(title)}</h1><p class="page-dek">{esc(dek)}</p>
-    <div class="chip-row">{cat_nav}</div>
+    {cat_nav}
   </div>
 </div>
-<div class="wrap"><div class="grid grid-3">{grid}</div>{cta_band(lang)}</div>"""
+<div class="wrap">{body}{cta_band(lang)}</div>"""
     doc += footer_html(lang, services, posts)
     write(os.path.join(DIST, f"{pfx(lang)}/blog".strip("/"), "index.html"), doc)
 
@@ -1378,7 +1482,7 @@ def render_category(c, lang, posts, services):
                meta_desc(c), url, lang=lang, og_image=SITE + "/img/logo.png",
                alternates=alternates,
                jsonld={"@context": "https://schema.org", "@graph": graph})
-    doc += header_html(lang, "blog", alternates)
+    doc += header_html(lang, f"/blog/{c['slug']}/", alternates)
     grid = "".join(post_card(p, eager=(i == 0)) for i, p in enumerate(items)) or \
         f'<p class="muted">{T(lang,"no_posts")}</p>'
     doc += f"""
@@ -1432,6 +1536,11 @@ def contact_form(lang):
 def render_page(pg, services, posts):
     lang = pg["lang"]
     body, toc = render_md(transform_callouts(pg["body_md"], lang))
+    # `<!--team-->` in the markdown marks where the team card grid belongs, so
+    # the page keeps control of the position without the card markup living in
+    # content. Falls back to appending if the marker is missing.
+    if "<!--team-->" in body:
+        body = body.replace("<!--team-->", team_cards(lang))
     if pg.get("form"):
         body += contact_form(lang)
     graph = [org_node(), website_node(lang),
@@ -1451,7 +1560,7 @@ def render_page(pg, services, posts):
                alternates=pg.get("alternates"),
                robots=pg.get("robots", "index,follow,max-image-preview:large,max-snippet:-1"),
                jsonld={"@context": "https://schema.org", "@graph": graph})
-    doc += header_html(lang, pg["slug"], pg.get("alternates"))
+    doc += header_html(lang, f"/{pg['slug']}/", pg.get("alternates"))
     doc += f"""
 <div class="page-hero">
   <div class="wrap wrap-narrow">
@@ -1558,7 +1667,7 @@ def render_home(lang, posts, services, pages):
                og_image=SITE + "/img/logo.png", og_type="website",
                alternates=alternates,
                jsonld={"@context": "https://schema.org", "@graph": graph})
-    doc += header_html(lang, "", alternates)
+    doc += header_html(lang, "/", alternates)
     doc += f"""
 <section class="masthead">
   <div class="masthead-art" aria-hidden="true">{skyline_svg()}</div>

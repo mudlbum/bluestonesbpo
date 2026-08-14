@@ -1,5 +1,5 @@
 """
-Deterministic, offline artwork generator for Future of Korea.
+Deterministic, offline artwork generator for Bluestones BPO.
 
 No external API, no network, no licensing risk: every hero image and social card
 is drawn procedurally with Pillow from a seed derived from the post slug, so the
@@ -12,6 +12,7 @@ Outputs per post:
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 import os
 import random
@@ -21,6 +22,18 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 FONT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "fonts")
+
+# The wordmark stamped on generated covers. Read from config rather than
+# hardcoded — the fork this generator came from was printing futureofkorea.com
+# onto every Bluestones article image.
+def _wordmark() -> str:
+    try:
+        cfg = json.load(open(os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "site.config.json"), encoding="utf-8"))
+        return cfg["domain"].split("//")[-1].rstrip("/").split("/")[0]
+    except Exception:                                   # noqa: BLE001
+        return ""
 
 # Bluestones BPO palette. Every beat is a variation on the corporate navy so the
 # archive reads as one publication; the accent shifts just enough to tell the
@@ -163,7 +176,14 @@ def _canvas(slug: str, category: str, size):
     d = ImageDraw.Draw(layer, "RGBA")
     _grid(d, w, h, "#ffffff", step=int(w / 22))
 
-    motif = rnd.choice(["topo", "nodes", "bars", "topo", "nodes"])
+    # Motif keyed to the category rather than chosen at random, so a reader
+    # starts to recognise a payroll piece from its thumbnail. Random per-slug
+    # motifs made the archive look like an unrelated set of stock backgrounds.
+    motif = {
+        "payroll": "bars", "accounting": "bars",
+        "tax": "topo", "compliance": "topo",
+        "entity": "nodes", "operations": "nodes",
+    }.get(category, rnd.choice(["topo", "nodes", "bars"]))
     if motif == "topo":
         _topography(d, w, h, rnd, "#ffffff", lines=rnd.randint(20, 32), alpha=rnd.randint(45, 85))
         _bars(d, w, h, rnd, secondary, highlight)
@@ -211,10 +231,20 @@ def editorial_cover(post: dict, out_path: str, size=(1600, 900)):
     (_, _), primary, secondary, highlight = pal
     w, h = size
 
+    # Diagonal scrim, not a full-frame wash. The old version laid 150–235 alpha
+    # of near-black over the whole canvas, which guaranteed legible text and also
+    # flattened every generated background into the same dark rectangle. Text
+    # sits bottom-left, so darken there and let the artwork stay visible in the
+    # top-right where the arc and nodes are.
     scrim = Image.new("RGBA", size, (0, 0, 0, 0))
     sd = ImageDraw.Draw(scrim, "RGBA")
     for i in range(h):
-        sd.line([(0, i), (w, i)], fill=(4, 7, 14, int(150 + 85 * (i / h) ** 0.7)))
+        v = i / h                                  # 0 at top, 1 at bottom
+        for band in range(0, w, 8):
+            u = band / w                           # 0 at left, 1 at right
+            # strongest bottom-left, weakest top-right
+            a = int(28 + 170 * (v ** 0.85) * (1.0 - 0.55 * u) + 40 * (1.0 - u) * (1.0 - v))
+            sd.rectangle([band, i, band + 8, i + 1], fill=(4, 10, 20, min(232, a)))
     img = Image.alpha_composite(img.convert("RGBA"), scrim).convert("RGB")
 
     d = ImageDraw.Draw(img, "RGBA")
@@ -250,9 +280,11 @@ def editorial_cover(post: dict, out_path: str, size=(1600, 900)):
         d.text((pad, y), line, font=f, fill=(255, 255, 255, 250))
         y += fs * 1.14
 
-    mono = _font("GeistMono-Regular.ttf", int(w * 0.0135))
-    d.text((w - pad - d.textlength("futureofkorea.com", font=mono), pad),
-           "futureofkorea.com", font=mono, fill=(255, 255, 255, 150))
+    mark = _wordmark()
+    if mark:
+        mono = _font("GeistMono-Regular.ttf", int(w * 0.0135))
+        d.text((w - pad - d.textlength(mark, font=mono), pad),
+               mark, font=mono, fill=(255, 255, 255, 165))
 
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     img.save(out_path, "WEBP", quality=86, method=6)
@@ -314,9 +346,11 @@ def photo_cover(post: dict, photo_path: str, out_path: str, size=(1600, 900)):
         d.text((pad, y), line, font=f, fill=(255, 255, 255, 252))
         y += fs * 1.14
 
-    mono = _font("GeistMono-Regular.ttf", int(w * 0.0135))
-    d.text((w - pad - d.textlength("futureofkorea.com", font=mono), pad),
-           "futureofkorea.com", font=mono, fill=(255, 255, 255, 165))
+    _mk = _wordmark()
+    if _mk:
+        mono = _font("GeistMono-Regular.ttf", int(w * 0.0135))
+        d.text((w - pad - d.textlength(_mk, font=mono), pad),
+               _mk, font=mono, fill=(255, 255, 255, 165))
 
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     img.save(out_path, "WEBP", quality=84, method=6)
@@ -419,8 +453,9 @@ def social_card(slug: str, category: str, title: str, kicker: str, out_path: str
         d.text((pad, y), line, font=f, fill=(255, 255, 255, 252))
         y += fs * 1.16
 
-    d.text((w - pad - d.textlength("futureofkorea.com", font=_font("GeistMono-Regular.ttf", 21)),
-            h - pad - 34), "futureofkorea.com",
+    _mk = _wordmark()
+    d.text((w - pad - d.textlength(_mk, font=_font("GeistMono-Regular.ttf", 21)),
+            h - pad - 34), _mk,
            font=_font("GeistMono-Regular.ttf", 21), fill=(255, 255, 255, 155))
 
     os.makedirs(os.path.dirname(out_path), exist_ok=True)

@@ -67,21 +67,7 @@ faq:
 - 저희가 아는 것을 출처와 기준일과 함께 [인사이트](/ko/blog/)에 공개하고, 바뀌면
   수정합니다.
 
-## 구성원
-
-**김우정** — 국제조세·한국조세 전문
-한국공인회계사. WITH회계법인 파트너. 前 딜로이트 안진회계법인. 고려대학교.
-
-**Brian H. Morikuni** — General Manager
-영국, 아일랜드, 버뮤다, 케이맨 제도, 홍콩, 한국 소재 법인 대표 역임. University of Hawaii at
-Mānoa.
-
-**김재은** — 한국 사업 설립 전문
-Soma Development VP. 前 Google 시니어 컨설턴트, Amazon B2B 커머스 매니저, WeWork 지역 영업
-디렉터.
-
-**신승수** — 비즈니스 모델링 전문
-前 McKinsey & Company 비즈니스 애널리스트. Wharton School, University of Pennsylvania.
+<!--team-->
 
 ## 저희와 맞지 않는 경우
 

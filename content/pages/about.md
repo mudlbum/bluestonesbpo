@@ -75,22 +75,7 @@ Every professional services firm claims integrity. Ours is testable, because it 
 - We publish what we know, with the source and the date attached, on
   [our blog](/blog/) — and we correct it when it changes.
 
-## Our professionals
-
-**Woojeong Kim** — International & Korea Tax Specialist
-Korean Certified Public Accountant. Partner, WITH Accounting Firm. Previously Deloitte Anjin.
-Korea University.
-
-**Brian H. Morikuni** — General Manager
-Former Managing Director of entities in the United Kingdom, Ireland, Bermuda, the Cayman
-Islands, Hong Kong and South Korea. University of Hawaii at Mānoa.
-
-**Jaeeun Kim** — Korea Business Setup Specialist
-VP, Soma Development. Previously Senior Consultant at Google, B2B Commerce Manager at Amazon,
-and Regional Sales Director at WeWork.
-
-**Steve S. Shin** — Business Modeling Specialist
-Previously Business Analyst at McKinsey & Company. Wharton School, University of Pennsylvania.
+<!--team-->
 
 ## Who we are not for
 

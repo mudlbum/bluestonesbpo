@@ -293,6 +293,61 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 }
 .svc-go { font-weight: 700; font-size: .92rem; text-decoration: none; margin-top: auto; }
 
+/* team cards — replaces a run of bold lines in the About prose */
+.team { margin: 3rem 0; }
+.team-grid {
+  display: grid; gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.tm-card {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  border-top: 3px solid var(--blue); padding: 1.3rem 1.4rem; transition: .18s ease;
+}
+.tm-card:hover { box-shadow: var(--shadow); border-top-color: var(--cyan); }
+.tm-head { display: flex; gap: .9rem; align-items: flex-start; margin-bottom: .9rem; }
+/* Initials, not a photograph: inventing headshots for real named people is not
+   an option, and a consistent monogram beats a stock portrait that is obviously
+   not them. */
+.tm-avatar {
+  flex: none; width: 46px; height: 46px; border-radius: 50%;
+  background: var(--navy); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .95rem; font-weight: 700; letter-spacing: .04em;
+}
+.tm-card h3 { font-size: 1.05rem; margin: 0 0 .15rem; line-height: 1.25; }
+.tm-role { font-size: .87rem; color: var(--blue); font-weight: 600; margin: 0; line-height: 1.35; }
+.tm-meta { list-style: none; padding: 0; margin: 0; }
+.tm-meta li {
+  font-size: .85rem; color: var(--ink-soft); line-height: 1.45;
+  padding: .3rem 0; border-top: 1px solid var(--line);
+}
+.tm-meta li:first-child { border-top: 0; padding-top: 0; }
+.tm-cred { color: var(--navy) !important; font-weight: 600; }
+.tm-alum { font-style: italic; }
+
+/* featured article — the newest post, leading the blog index */
+.feature {
+  display: grid; grid-template-columns: 1.15fr 1fr; gap: 0;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; margin: 2.5rem 0; transition: .18s ease;
+}
+.feature:hover { box-shadow: var(--shadow-lg); }
+.feature-media { display: block; background: var(--pale); }
+.feature-media img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 260px; }
+.feature-body { padding: 2rem 2.2rem; display: flex; flex-direction: column; justify-content: center; }
+.feature-title { font-size: 1.5rem; margin: .7rem 0 .6rem; line-height: 1.25; }
+.feature-title a { color: var(--navy); text-decoration: none; }
+.feature-title a:hover { color: var(--blue); }
+.feature-dek { color: var(--ink-soft); font-size: 1rem; margin-bottom: .9rem; }
+
+/* topic filter on the blog index */
+.topic-filter { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; margin-top: 1.4rem; }
+.topic-label {
+  font-size: .74rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-soft); font-weight: 700;
+}
+.topic-filter .chip-row { margin-top: 0; }
+
 /* why-us grid */
 .why-grid { display: grid; gap: 1.6rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .why-item { border-left: 3px solid var(--pale); padding-left: 1.2rem; }
@@ -572,6 +627,9 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 }
 
 @media (max-width: 900px) {
+  .feature { grid-template-columns: 1fr; }
+  .feature-media img { min-height: 200px; max-height: 260px; }
+  .feature-body { padding: 1.5rem 1.4rem; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
   .footer-brand-col { grid-column: 1 / -1; }
   .cta-inner { grid-template-columns: 1fr; }
