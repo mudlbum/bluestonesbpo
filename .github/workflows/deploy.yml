@@ -35,6 +35,12 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build site
+        env:
+          # Optional. Add it under Settings > Secrets and variables > Actions if
+          # you want licensed Pexels photography behind article covers instead of
+          # the drawn artwork. Absent or empty, the build silently falls back to
+          # the generated covers — it is not an error and nothing breaks.
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: python build.py
 
       # Runs with CI set, so factcheck fetches every source URL for real rather

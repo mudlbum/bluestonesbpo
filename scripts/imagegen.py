@@ -414,7 +414,7 @@ def hero(post, category=None, out_path=None, size=(1600, 900)):
 
     try:
         import photos
-        rec = photos.fetch(post, offline=bool(os.environ.get("FOK_OFFLINE")))
+        rec = photos.fetch(post, offline=bool(os.environ.get("BSB_OFFLINE")))
         if rec and os.path.exists(rec["path"]):
             post["_photo_credit"] = photos.credit_html(rec)
             if rec.get("alt"):
