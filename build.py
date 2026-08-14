@@ -1770,43 +1770,6 @@ def hero_photo_layer(url: str) -> str:
             f'style="background-image:url(&quot;{url}&quot;)"></div>')
 
 
-def hanok_defs():
-    """Traditional Korean motifs, drawn rather than photographed.
-
-    Two patterns, both taken from hanok architecture:
-
-    * `latt` — 정자살, the square-grid window lattice, with a diamond inset in
-      each cell. Deliberately the plain grid form and not 완자살, whose meander
-      motif can be misread as a swastika by a Western viewer. On a site whose
-      whole audience is foreign companies, that risk is not worth the ornament.
-    * `giwa` — the scalloped end-tiles of a 기와 roof, run as a band.
-
-    Drawn instead of sourced for the same reason the rest of the artwork is: a
-    photograph needs a licence, and a hotlinked one eventually 404s. Two
-    kilobytes of SVG costs no request, scales to any screen, and is ours.
-    """
-    return """
-  <pattern id="latt" width="132" height="132" patternUnits="userSpaceOnUse">
-    <g fill="none" stroke="#CFE2F0" stroke-width="2.2" opacity=".85">
-      <rect x="0" y="0" width="132" height="132"/>
-      <path d="M66 0V132M0 66H132"/>
-      <rect x="18" y="18" width="30" height="30"/>
-      <rect x="84" y="18" width="30" height="30"/>
-      <rect x="18" y="84" width="30" height="30"/>
-      <rect x="84" y="84" width="30" height="30"/>
-      <path d="M66 26 92 66 66 106 40 66Z"/>
-    </g>
-  </pattern>
-  <pattern id="giwa" width="96" height="52" patternUnits="userSpaceOnUse">
-    <g fill="none" stroke="#CFE2F0" stroke-width="2.4" opacity=".9">
-      <path d="M0 44a24 24 0 0 1 48 0a24 24 0 0 1 48 0"/>
-      <path d="M0 52h96"/>
-      <circle cx="24" cy="40" r="5"/>
-      <circle cx="72" cy="40" r="5"/>
-    </g>
-  </pattern>"""
-
-
 def skyline_svg(photo: bool = False):
     """An original, drawn-not-photographed Seoul-ish skyline.
 
@@ -1854,21 +1817,8 @@ def skyline_svg(photo: bool = False):
       <stop offset="0%" stop-color="#6EA4CA" stop-opacity=".00"/>
       <stop offset="100%" stop-color="#1EABC7" stop-opacity=".22"/>
     </linearGradient>
-    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fff" stop-opacity=".85"/>
-      <stop offset="70%" stop-color="#fff" stop-opacity=".15"/>
-      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
-    </linearGradient>
-    <mask id="latt-fade"><rect width="1440" height="420" fill="url(#fade)"/></mask>
-    {hanok_defs()}
   </defs>
   {base}
-  <!-- Hanok lattice, faint and fading downward so it never competes with the
-       headline panel that sits over the lower-left of this band. -->
-  <g mask="url(#latt-fade)" opacity=".09">
-    <rect width="1440" height="420" fill="url(#latt)"/>
-  </g>
-  <g opacity=".10"><rect y="0" width="1440" height="52" fill="url(#giwa)"/></g>
   <rect y="250" width="1440" height="170" fill="url(#glow)"/>
   {buildings}
 </svg>"""
