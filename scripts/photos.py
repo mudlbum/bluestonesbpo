@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Photographic hero sourcing for Future of Korea.
+Photographic hero sourcing for Bluestones BPO.
 
 Fetches a licensed landscape photograph per article from Pexels, caches it in the
 repository, and records the photographer for attribution. The build composites it
@@ -36,7 +36,7 @@ PHOTO_DIR = os.path.join(ROOT, "assets", "photos")
 INDEX = os.path.join(ROOT, "content", "_data", "photos.json")
 API = "https://api.pexels.com/v1/search"
 TIMEOUT = 20
-UA = "futureofkorea-build/1.0 (+https://futureofkorea.com/)"
+UA = "bluestonesbpo-build/1.0 (+https://www.bluestonesbpo.com/)"
 
 # Fallback search terms per category. Deliberately concrete and Korea-anchored:
 # generic "business" stock photography is what makes a site look like a template.
