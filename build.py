@@ -774,9 +774,9 @@ def footer_html(lang, services, posts):
     }[lang]
     legal_html = "".join(f'<li><a href="{pfx(lang)}{u}">{esc(t)}</a></li>' for t, u in legal)
     company = {
-        "en": [("About us", "/about/"), ("Contact", "/contact/"), ("Insights", "/blog/"),
+        "en": [("About us", "/about/"), ("Contact", "/contact/"), ("Blog", "/blog/"),
                ("Editorial policy", "/editorial-policy/")],
-        "ko": [("회사 소개", "/about/"), ("문의", "/contact/"), ("인사이트", "/blog/"),
+        "ko": [("회사 소개", "/about/"), ("문의", "/contact/"), ("블로그", "/blog/"),
                ("콘텐츠 정책", "/editorial-policy/")],
     }[lang]
     company_html = "".join(f'<li><a href="{pfx(lang)}{u}">{esc(t)}</a></li>' for t, u in company)
