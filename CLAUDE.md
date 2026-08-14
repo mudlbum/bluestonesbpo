@@ -129,7 +129,8 @@ sources:
 * `accessed` may not be in the future, and not more than 400 days before the post date
 * every takeaway carries at least one source index and **a bolded span containing a digit**.
   If a claim has no number it is not a takeaway — put it in the body.
-* every source URL is fetched during CI validation; a dead link fails the build
+* every source URL is fetched during CI validation; an unreachable one warns rather than
+  failing the build — see the note in `scripts/factcheck.py`
 
 ## Body conventions
 
