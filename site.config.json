@@ -163,22 +163,27 @@
   "nav": [
     {
       "label": "Services",
+      "label_ko": "서비스",
       "url": "/services/"
     },
     {
       "label": "Company Setup",
+      "label_ko": "법인 설립",
       "url": "/services/company-registration/"
     },
     {
       "label": "Insights",
+      "label_ko": "인사이트",
       "url": "/insights/"
     },
     {
       "label": "About",
+      "label_ko": "회사 소개",
       "url": "/about/"
     },
     {
       "label": "Contact",
+      "label_ko": "문의",
       "url": "/contact/"
     }
   ],
