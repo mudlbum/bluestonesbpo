@@ -193,6 +193,9 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   z-index: 3; margin: 0; max-width: 60%; text-align: right;
   font-size: .68rem; line-height: 1.3; color: rgba(255, 255, 255, .42);
 }
+/* credit_html() emits `<p class="photo-credit muted small">`, whose muted colour
+   is meant for a white page. Neutralise it inside a hero. */
+.hero-credit p { margin: 0; font-size: inherit; color: inherit; }
 .hero-credit a { color: rgba(255, 255, 255, .58); text-decoration: none; }
 .hero-credit a:hover { color: rgba(255, 255, 255, .85); text-decoration: underline; }
 .svc-hero { position: relative; }

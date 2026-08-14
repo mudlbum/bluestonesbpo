@@ -1324,7 +1324,7 @@ def render_service(s, services, posts):
 <div class="svc-hero">
   {hero_photo_layer(ph_url)}
   <div class="wrap">
-    {f'<p class="hero-credit">{ph_credit}</p>' if ph_credit else ''}
+    {f'<div class="hero-credit">{ph_credit}</div>' if ph_credit else ''}
     <nav class="crumbs" aria-label="{T(lang,'breadcrumb')}">
       <ol><li><a href="{pfx(lang)}/">{T(lang,'home')}</a></li>
       <li><a href="{pfx(lang)}/services/">{T(lang,'services')}</a></li>
@@ -1674,7 +1674,7 @@ def render_home(lang, posts, services, pages):
                jsonld={"@context": "https://schema.org", "@graph": graph})
     doc += header_html(lang, "/", alternates)
     photo_url, photo_credit = hero_photo("home", (CFG.get("hero") or {}).get("query", ""))
-    credit_line = (f'<p class="hero-credit">{photo_credit}</p>' if photo_credit else "")
+    credit_line = (f'<div class="hero-credit">{photo_credit}</div>' if photo_credit else "")
     doc += f"""
 <section class="masthead">
   {hero_photo_layer(photo_url)}
