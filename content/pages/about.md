@@ -15,7 +15,7 @@ faq:
   - q: "Are you an accounting firm or an outsourcing provider?"
     a: "Both, and the combination is the point. A Korean Certified Public Accountant is involved in every engagement, which is what allows tax positions and statutory accounts to be signed off properly. The outsourcing side is the day-to-day processing that keeps those filings from becoming a year-end scramble. Firms that do only one of the two hand you a gap between them."
   - q: "What languages do you work in?"
-    a: "Korean for statutory filings, correspondence with the tax office and the insurance authorities, and everything that has to be submitted locally. English for reporting, meetings and correspondence with your head office. We also support Japanese-speaking clients. The dual-language capability is not a nicety — it is the reason a foreign parent can actually understand what its Korean entity is doing."
+    a: "Korean and English. Korean for statutory filings, correspondence with the tax office and the insurance authorities, and everything that has to be submitted locally. English for reporting, meetings and correspondence with your head office. That dual-language capability is not a nicety — it is the reason a foreign parent can actually understand what its Korean entity is doing."
 ---
 
 ## Who we are

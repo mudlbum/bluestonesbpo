@@ -144,6 +144,31 @@ def _nodes(draw, w, h, rnd, colour, accent, count=16):
         draw.ellipse([p[0] - r, p[1] - r, p[0] + r, p[1] + r], fill=c + (190,))
 
 
+def _lattice(draw, w, h, colour, cell=None, alpha=24):
+    """Hanok window lattice (정자살) — a square grid with a diamond in each cell.
+
+    The plain grid form deliberately, not 완자살: that pattern's meander motif
+    can read as a swastika to a Western viewer, and this site's entire audience
+    is foreign companies. Drawn rather than photographed for the same reason as
+    the rest of the artwork — no licence to clear, nothing to 404.
+    """
+    col = _hex(colour) + (alpha,)
+    cell = cell or int(w / 7.5)
+    lw = max(1, int(w * 0.0016))
+    for x in range(0, w + cell, cell):
+        draw.line([(x, 0), (x, h)], fill=col, width=lw)
+        draw.line([(x + cell // 2, 0), (x + cell // 2, h)], fill=col, width=lw)
+    for y in range(0, h + cell, cell):
+        draw.line([(0, y), (w, y)], fill=col, width=lw)
+        draw.line([(0, y + cell // 2), (w, y + cell // 2)], fill=col, width=lw)
+    d = cell * 0.30
+    for x in range(0, w + cell, cell):
+        for y in range(0, h + cell, cell):
+            cx, cy = x + cell / 2, y + cell / 2
+            draw.polygon([(cx, cy - d), (cx + d, cy), (cx, cy + d), (cx - d, cy)],
+                         outline=col)
+
+
 def _grid(draw, w, h, colour, step=64, alpha=26):
     col = _hex(colour) + (alpha,)
     for x in range(0, w, step):
@@ -174,7 +199,10 @@ def _canvas(slug: str, category: str, size):
 
     layer = Image.new("RGBA", size, (0, 0, 0, 0))
     d = ImageDraw.Draw(layer, "RGBA")
-    _grid(d, w, h, "#ffffff", step=int(w / 22))
+    # Hanok lattice as the base texture, with the fine grid over it. Ties the
+    # article covers to the site heroes, which carry the same motif in SVG.
+    _lattice(d, w, h, "#CFE2F0", alpha=22)
+    _grid(d, w, h, "#ffffff", step=int(w / 22), alpha=16)
 
     # Motif keyed to the category rather than chosen at random, so a reader
     # starts to recognise a payroll piece from its thumbnail. Random per-slug

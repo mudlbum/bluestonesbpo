@@ -18,7 +18,7 @@ faq:
   - q: "Can we meet in person?"
     a: "Yes. Our office is in Gangnam-gu, Seoul, and we are happy to meet there or at your office. For overseas head offices we work by video across time zones — early Korean mornings suit European clients, late Korean afternoons suit the US west coast."
   - q: "In what languages can we correspond?"
-    a: "English, Korean or Japanese. Statutory filings and correspondence with Korean authorities are handled in Korean regardless; your side of the conversation can be in whichever of the three you prefer."
+    a: "English or Korean. Statutory filings and correspondence with Korean authorities are handled in Korean regardless; your side of the conversation can be in whichever of the two you prefer."
 ---
 
 ## Tell us what you need

@@ -187,9 +187,14 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .page-hero, .svc-hero { background: var(--mist); border-bottom: 1px solid var(--line); }
 .page-hero > .wrap { padding-block: 2.8rem 2.4rem; }
 .svc-hero > .wrap { padding-block: 2rem 3rem; }
+/* Hanok window lattice (정자살), drawn not photographed — see hanok_defs()
+   in build.py for why. Faint enough to read as texture, not pattern. */
 .svc-hero {
-  background: var(--navy);
-  background-image: radial-gradient(ellipse at 78% 18%, rgba(30,171,199,.20), transparent 62%);
+  background-color: var(--navy);
+  background-image:
+    radial-gradient(ellipse at 78% 18%, rgba(30,171,199,.22), transparent 62%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='132' height='132' viewBox='0 0 132 132'%3E%3Cg fill='none' stroke='%23CFE2F0' stroke-opacity='0.13' stroke-width='2.2'%3E%3Crect x='0' y='0' width='132' height='132'/%3E%3Cpath d='M66 0V132M0 66H132'/%3E%3Crect x='18' y='18' width='30' height='30'/%3E%3Crect x='84' y='18' width='30' height='30'/%3E%3Crect x='18' y='84' width='30' height='30'/%3E%3Crect x='84' y='84' width='30' height='30'/%3E%3Cpath d='M66 26 92 66 66 106 40 66Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat, repeat;
   border-bottom: 0;
 }
 .svc-hero h1 { color: #fff; margin-bottom: .55em; }
