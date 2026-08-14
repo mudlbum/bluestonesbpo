@@ -1317,9 +1317,14 @@ def render_service(s, services, posts):
       <ul>{''.join(f'<li>{esc(x)}</li>' for x in s['deliverables'])}</ul>
     </aside>"""
 
+    # Photo fetched once per service (English pass) and reused by the Korean
+    # counterpart — the same page in two languages should not wear two faces.
+    ph_url, ph_credit = hero_photo(s["slug"], s.get("hero_query", ""))
     doc += f"""
 <div class="svc-hero">
+  {hero_photo_layer(ph_url)}
   <div class="wrap">
+    {f'<p class="hero-credit">{ph_credit}</p>' if ph_credit else ''}
     <nav class="crumbs" aria-label="{T(lang,'breadcrumb')}">
       <ol><li><a href="{pfx(lang)}/">{T(lang,'home')}</a></li>
       <li><a href="{pfx(lang)}/services/">{T(lang,'services')}</a></li>
@@ -1668,9 +1673,13 @@ def render_home(lang, posts, services, pages):
                alternates=alternates,
                jsonld={"@context": "https://schema.org", "@graph": graph})
     doc += header_html(lang, "/", alternates)
+    photo_url, photo_credit = hero_photo("home", (CFG.get("hero") or {}).get("query", ""))
+    credit_line = (f'<p class="hero-credit">{photo_credit}</p>' if photo_credit else "")
     doc += f"""
 <section class="masthead">
-  <div class="masthead-art" aria-hidden="true">{skyline_svg()}</div>
+  {hero_photo_layer(photo_url)}
+  <div class="masthead-art" aria-hidden="true">{skyline_svg(photo=bool(photo_url))}</div>
+  {credit_line}
   <div class="wrap masthead-inner">
     <div class="masthead-panel">
       <h1>{esc(h1)}</h1>
@@ -1702,6 +1711,63 @@ def render_home(lang, posts, services, pages):
 </div>"""
     doc += footer_html(lang, services, posts)
     write(os.path.join(DIST, f"{pfx(lang)}".strip("/"), "index.html"), doc)
+
+
+def hero_photo(key: str, query: str, size=(1920, 1000)):
+    """Fetch and prepare a photographic backdrop for a page hero.
+
+    Returns (url, credit_html) — both empty strings when there is no API key, no
+    network, or no acceptable match, in which case the hero falls back to the
+    gradient and lattice it already had. A missing photo is never an error.
+
+    The image is deliberately saved at low quality: it sits behind an overlay at
+    roughly 10% visibility, so detail is invisible and bytes spent on it are
+    bytes wasted on a page whose LCP is the headline.
+    """
+    if not query:
+        return "", ""
+    try:
+        import photos
+        from PIL import Image
+        rec = photos.fetch({"slug": f"hero-{key}", "photo_query": query,
+                            "title": query, "tags": []},
+                           offline=bool(os.environ.get("BSB_OFFLINE")))
+        if not rec or not os.path.exists(rec["path"]):
+            return "", ""
+        img = Image.open(rec["path"]).convert("RGB")
+        tw, th = size
+        scale = max(tw / img.width, th / img.height)
+        img = img.resize((max(tw, int(img.width * scale)), max(th, int(img.height * scale))),
+                         Image.LANCZOS)
+        left, top = (img.width - tw) // 2, (img.height - th) // 2
+        img = img.crop((left, top, left + tw, top + th))
+        out = os.path.join(DIST, "img", f"hero-{key}.webp")
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        img.save(out, "WEBP", quality=62, method=6)
+        return f"{BASE}/img/hero-{key}.webp", photos.credit_html(rec)
+    except Exception as e:                                  # noqa: BLE001
+        print(f"  hero photo for {key} unavailable ({type(e).__name__}) — using the gradient")
+        return "", ""
+
+
+def hero_photo_layer(url: str) -> str:
+    """The photograph as its own stacked layer, not an inline background-image.
+
+    Two reasons it is a separate element rather than a style on the band itself:
+
+    * `.svc-hero` already carries background layers — the cyan radial and the
+      hanok lattice. An inline `background-image` replaces that property whole,
+      so the lattice would silently vanish on any page that got a photo.
+    * Opacity on a background-image cannot be set independently of the element's
+      contents. On a layer it is one number, which is what makes "low enough to
+      blend in" adjustable rather than a guess baked into an overlay gradient.
+
+    Sits at 14%, under the text and over the base colour.
+    """
+    if not url:
+        return ""
+    return (f'<div class="hero-photo" aria-hidden="true" '
+            f'style="background-image:url(&quot;{url}&quot;)"></div>')
 
 
 def hanok_defs():
@@ -1741,39 +1807,18 @@ def hanok_defs():
   </pattern>"""
 
 
-def skyline_svg():
+def skyline_svg(photo: bool = False):
     """An original, drawn-not-photographed Seoul-ish skyline.
 
     The Wix site used a stock night-skyline photograph. Rather than reuse an image
     we have no licence for, the same feeling is produced as ~2 KB of inline SVG,
     which also happens to cost nothing in Largest Contentful Paint.
     """
-    return f"""<svg viewBox="0 0 1440 420" preserveAspectRatio="xMidYMax slice" role="presentation">
-  <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0C3C60"/><stop offset="55%" stop-color="#134A78"/>
-      <stop offset="100%" stop-color="#08243D"/>
-    </linearGradient>
-    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#6EA4CA" stop-opacity=".00"/>
-      <stop offset="100%" stop-color="#1EABC7" stop-opacity=".22"/>
-    </linearGradient>
-    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fff" stop-opacity=".85"/>
-      <stop offset="70%" stop-color="#fff" stop-opacity=".15"/>
-      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
-    </linearGradient>
-    <mask id="latt-fade"><rect width="1440" height="420" fill="url(#fade)"/></mask>
-    {hanok_defs()}
-  </defs>
-  <rect width="1440" height="420" fill="url(#sky)"/>
-  <!-- Hanok lattice, faint and fading downward so it never competes with the
-       headline panel that sits over the lower-left of this band. -->
-  <g mask="url(#latt-fade)" opacity=".09">
-    <rect width="1440" height="420" fill="url(#latt)"/>
-  </g>
-  <g opacity=".10"><rect y="0" width="1440" height="52" fill="url(#giwa)"/></g>
-  <rect y="250" width="1440" height="170" fill="url(#glow)"/>
+    # With a photograph behind it, the drawn skyline is both redundant and
+    # opaque — its base rect would hide the photo entirely. In that case only
+    # the lattice and the giwa band are drawn, over a transparent canvas.
+    base = "" if photo else '<rect width="1440" height="420" fill="url(#sky)"/>'
+    buildings = "" if photo else """
   <g fill="#061C30" opacity=".85">
     <rect x="40" y="250" width="70" height="170"/><rect x="126" y="292" width="52" height="128"/>
     <rect x="196" y="228" width="84" height="192"/><rect x="298" y="272" width="60" height="148"/>
@@ -1797,7 +1842,35 @@ def skyline_svg():
     <rect x="882" y="232" width="7" height="9"/><rect x="914" y="276" width="7" height="9"/>
     <rect x="1064" y="208" width="7" height="9"/><rect x="1136" y="296" width="7" height="9"/>
     <rect x="1240" y="258" width="7" height="9"/><rect x="1330" y="312" width="7" height="9"/>
+  </g>"""
+
+    return f"""<svg viewBox="0 0 1440 420" preserveAspectRatio="xMidYMax slice" role="presentation">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0C3C60"/><stop offset="55%" stop-color="#134A78"/>
+      <stop offset="100%" stop-color="#08243D"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6EA4CA" stop-opacity=".00"/>
+      <stop offset="100%" stop-color="#1EABC7" stop-opacity=".22"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff" stop-opacity=".85"/>
+      <stop offset="70%" stop-color="#fff" stop-opacity=".15"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="latt-fade"><rect width="1440" height="420" fill="url(#fade)"/></mask>
+    {hanok_defs()}
+  </defs>
+  {base}
+  <!-- Hanok lattice, faint and fading downward so it never competes with the
+       headline panel that sits over the lower-left of this band. -->
+  <g mask="url(#latt-fade)" opacity=".09">
+    <rect width="1440" height="420" fill="url(#latt)"/>
   </g>
+  <g opacity=".10"><rect y="0" width="1440" height="52" fill="url(#giwa)"/></g>
+  <rect y="250" width="1440" height="170" fill="url(#glow)"/>
+  {buildings}
 </svg>"""
 
 

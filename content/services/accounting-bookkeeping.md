@@ -9,6 +9,7 @@ category: accounting
 service_name: "Accounting and bookkeeping outsourcing"
 service_type: "Accounting service"
 audience: "Foreign-invested subsidiaries, branches and liaison offices operating in South Korea"
+hero_query: "accounting documents desk calculator"
 updated: 2026-08-13
 toc: true
 highlights:

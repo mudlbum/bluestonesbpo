@@ -9,6 +9,7 @@ category: operations
 service_name: "Operational and financial control support"
 service_type: "Business administration service"
 audience: "Foreign parents overseeing a small Korean operation from abroad"
+hero_query: "bank finance office building interior"
 updated: 2026-08-13
 toc: true
 highlights:

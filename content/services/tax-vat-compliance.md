@@ -9,6 +9,7 @@ category: tax
 service_name: "Korean tax compliance and VAT filing"
 service_type: "Tax preparation service"
 audience: "Foreign-invested companies, branches and liaison offices with Korean filing obligations"
+hero_query: "tax paperwork calculator office desk"
 updated: 2026-08-13
 toc: true
 highlights:

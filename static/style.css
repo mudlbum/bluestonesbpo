@@ -173,6 +173,30 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .masthead-actions .btn-outline { color: var(--navy); border-color: var(--navy); }
 .masthead-actions .btn-outline:hover { background: var(--navy); color: #fff; }
 
+/* Photographic backdrop for a hero band, as its own layer.
+   14% is the number that matters: enough that the band has depth and a sense of
+   place, little enough that white text over it keeps essentially the contrast it
+   had against flat navy. Raise it and you start trading legibility for scenery.
+   Sits above the base colour, below the lattice and below all content. */
+.hero-photo {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+  opacity: .14; pointer-events: none;
+}
+.masthead-inner, .svc-hero > .wrap, .page-hero > .wrap { position: relative; z-index: 2; }
+
+/* Photo credit on a hero band. Pexels does not strictly require attribution,
+   but crediting the photographer is the right default and costs nothing — so it
+   is rendered, quietly, rather than omitted. */
+.hero-credit {
+  position: absolute; right: 20px; bottom: 8px; z-index: 3;
+  margin: 0; font-size: .68rem; color: rgba(255, 255, 255, .42);
+}
+.hero-credit a { color: rgba(255, 255, 255, .58); text-decoration: none; }
+.hero-credit a:hover { color: rgba(255, 255, 255, .85); text-decoration: underline; }
+.svc-hero { position: relative; }
+.svc-hero .hero-credit { bottom: 6px; }
+
 /* stat strip */
 .stats { background: var(--navy); color: #fff; }
 .stats-row {

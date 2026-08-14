@@ -9,6 +9,7 @@ category: payroll
 service_name: "Payroll outsourcing and HR administration"
 service_type: "Payroll service"
 audience: "Foreign employers with staff on a Korean payroll"
+hero_query: "office team working meeting"
 updated: 2026-08-13
 toc: true
 highlights:

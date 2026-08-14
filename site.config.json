@@ -278,5 +278,9 @@
     "author_slug": "bluestones-desk",
     "author_role": "Accounting, Payroll & Compliance Team",
     "author_bio": "Bluestones BPO's Seoul-based accounting, payroll and compliance team writes these notes for foreign companies operating in Korea. Every figure, rate, threshold and deadline is checked against the primary source — the National Tax Service, the Ministry of Employment and Labor, the four major insurance authorities, the Korea Immigration Service or the relevant statute — and dated to the period it covers. Guidance here is general; it is not a substitute for engagement-specific advice."
+  },
+  "hero": {
+    "query": "Seoul South Korea city skyline",
+    "note": "Search phrase for the home hero backdrop, fetched from Pexels at build time when PEXELS_API_KEY is set. Empty string disables it and the hero falls back to the gradient + hanok lattice."
   }
 }

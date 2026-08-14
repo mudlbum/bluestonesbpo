@@ -9,6 +9,7 @@ category: entity
 service_name: "Company formation and market entry support"
 service_type: "Business formation service"
 audience: "Overseas companies establishing a legal presence in South Korea"
+hero_query: "Seoul South Korea modern architecture"
 updated: 2026-08-13
 toc: true
 highlights:
