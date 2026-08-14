@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Chart rendering for Future of Korea.
+Chart rendering for Bluestones BPO.
 
 When a post declares a `chart:` block, its hero image is a real chart drawn from
 the post's own figures — not decoration. Charts are rendered offline with
@@ -25,6 +25,7 @@ a wrong chart is worse than no chart.
 """
 from __future__ import annotations
 
+import json
 import os
 
 import matplotlib
@@ -43,15 +44,29 @@ GRID = "#222a3d"
 BG = "#0a0e1a"
 PANEL = "#111726"
 
+# Bluestones categories, keyed to the accents in site.config.json so a chart
+# reads as the same publication as the page it sits on.
 ACCENTS = {
-    "markets":    ["#ff4d63", "#f4c04e", "#7db2ff"],
-    "technology": ["#5aa0ff", "#7ef3d0", "#ffa733"],
-    "living":     ["#3fd6a4", "#ffd166", "#5aa0ff"],
-    "society":    ["#a882ff", "#ff9ecb", "#5aa0ff"],
-    "policy":     ["#ffa733", "#ffe5a3", "#5aa0ff"],
-    "kcontent":   ["#ff2e88", "#ffd166", "#5aa0ff"],
-    "_default":   ["#ff4d63", "#5aa0ff", "#3fd6a4"],
+    "accounting":  ["#39729B", "#6EA4CA", "#D1E0EB"],
+    "payroll":     ["#1EABC7", "#7FD4E4", "#D1E0EB"],
+    "tax":         ["#1EABC7", "#6FD6E8", "#EFF1F2"],
+    "entity":      ["#6EA4CA", "#A9CBE4", "#EFF1F2"],
+    "compliance":  ["#39729B", "#A9CBE4", "#D1E0EB"],
+    "operations":  ["#39729B", "#7FD4E4", "#D1E0EB"],
+    "_default":    ["#1EABC7", "#6EA4CA", "#D1E0EB"],
 }
+
+
+# The wordmark stamped under every chart. Read from config rather than
+# hardcoded — the fork this generator came from printed futureofkorea.com.
+def _wordmark() -> str:
+    try:
+        cfg = json.load(open(os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "site.config.json"), encoding="utf-8"))
+        return cfg["domain"].split("//")[-1].rstrip("/").split("/")[0]
+    except Exception:                                   # noqa: BLE001
+        return ""
 
 _FAMILY: str | None = None
 
@@ -193,7 +208,9 @@ def render(spec: dict, category: str, out_path: str, size=(1600, 900), *,
         for t in leg.get_texts():
             t.set_fontfamily(family)
 
-    fig.text(0.012, 0.022, f"Source: {spec['source']}   ·   futureofkorea.com",
+    mark = _wordmark()
+    footer = f"Source: {spec['source']}" + (f"   ·   {mark}" if mark else "")
+    fig.text(0.012, 0.022, footer,
              color=INK_3, fontsize=14, fontfamily=family)
 
     fig.subplots_adjust(left=0.085, right=0.955, top=0.86, bottom=0.13)

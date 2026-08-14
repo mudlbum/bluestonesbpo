@@ -1,4 +1,6 @@
 dist/
+# build.py moves dist aside under this name when the OneDrive mount refuses a delete
+dist.stale-*/
 __pycache__/
 *.pyc
 .DS_Store
