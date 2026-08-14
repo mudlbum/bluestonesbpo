@@ -779,6 +779,15 @@ def footer_html(lang, services, posts):
         "ko": ("블루스톤즈 BPO는 외국인투자기업을 위한 회계·급여·운영 아웃소싱 전문 기업입니다. "
                "한국 법인의 규제 준수를 저희가 맡고, 고객사는 본업에 집중하실 수 있도록 지원합니다."),
     }[lang]
+    colophon = {
+        "en": (f"&copy; {year} Bluestones BPO. All rights reserved. Guidance published here is "
+               f"general information about Korean accounting, payroll and tax practice, not advice "
+               f"on your specific facts — see our "
+               f'<a href="{pfx(lang)}/disclaimer/">disclaimer</a>.'),
+        "ko": (f"&copy; {year} Bluestones BPO. 본 사이트의 내용은 한국의 회계·급여·세무 실무에 "
+               f"관한 일반적인 정보이며 개별 사안에 대한 자문이 아닙니다. "
+               f'<a href="{pfx(lang)}/disclaimer/">면책 고지</a>를 참고하십시오.'),
+    }[lang]
 
     return f"""</main>
 <footer class="site-footer">
@@ -802,10 +811,7 @@ def footer_html(lang, services, posts):
     <div><h2 class="footer-h">{T(lang,'legal')}</h2><ul class="plain">{legal_html}</ul></div>
   </div>
   <div class="wrap footer-bottom">
-    <p class="muted small">&copy; {year} Bluestones BPO. All rights reserved.
-    Guidance published here is general information about Korean accounting, payroll and tax
-    practice, not advice on your specific facts — see our
-    <a href="{pfx(lang)}/disclaimer/">disclaimer</a>.</p>
+    <p class="muted small">{colophon}</p>
   </div>
 </footer>
 <script src="/script.js" defer></script>
