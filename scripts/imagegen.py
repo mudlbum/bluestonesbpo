@@ -444,7 +444,7 @@ def _fit(draw, text, font_path, max_w, max_h, start, min_size=34, line_gap=1.16)
 
 
 def social_card(slug: str, category: str, title: str, kicker: str, out_path: str,
-                site_name="FUTURE OF KOREA", size=(1200, 630)):
+                site_name="BLUESTONES BPO", size=(1200, 630)):
     img, pal = _canvas(slug, category, size)
     (_, _), primary, secondary, highlight = pal
     w, h = size

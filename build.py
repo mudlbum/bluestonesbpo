@@ -538,7 +538,26 @@ def _pair_translations(items):
         by_base.setdefault(it["basename"], {})[it["lang"]] = it
     for it in items:
         it["alternates"] = {lg: o["url"] for lg, o in by_base[it["basename"]].items()}
+        it["_twins"] = by_base[it["basename"]]
     return items
+
+
+def _artwork_source(p):
+    """The post whose text should be drawn onto this article's artwork.
+
+    Generated heroes and OG cards are typeset in the bundled faces (Instrument
+    Sans, Geist Mono), which carry no Hangul — a Korean headline drawn onto one
+    comes out as tofu boxes. So artwork always takes its text from the English
+    twin where one exists, and every language of an article shares that single
+    image. `image_text:` in front matter overrides the headline for artwork only,
+    which is the escape hatch for a Korean-only post: set a short English line.
+
+    Falls back to the post itself, so a Korean-only article with no `image_text`
+    still builds — it just renders badly, which is visible rather than silent.
+    """
+    src = p["_twins"].get(DEFAULT_LANG, p)
+    override = p.get("image_text") or src.get("image_text")
+    return {**src, "title": override} if override else src
 
 
 def _recency_key(p):
@@ -2071,22 +2090,32 @@ def build():
     print(f"→ {len(posts)} posts, {len(services)} service pages, {len(pages)} pages")
 
     imagegen.logo(os.path.join(DIST, "img", "logo.png"))
+    drawn = set()
     for p in posts:
-        meta = {**p, "category_name": cat_for(p["category"], p["lang"]).get("name", "")}
+        if p["slug"] in drawn:
+            continue
+        drawn.add(p["slug"])
+        src = _artwork_source(p)
+        meta = {**src, "category_name": cat_for(src["category"], DEFAULT_LANG).get("name", "")}
         imagegen.hero(meta, os.path.join(DIST, "img", f"{p['slug']}-hero.webp"))
-        if meta.get("_photo_credit"):
-            p["photo_credit"] = meta["_photo_credit"]
-        if meta.get("_photo_alt"):
-            p["image_alt"] = meta["_photo_alt"]
-        imagegen.social_card(p["slug"], p["category"], p["title"],
-                             cat_for(p["category"], p["lang"]).get("name", ""),
-                             os.path.join(DIST, "img", f"{p['slug']}-og.png"))
+        # One image serves every language of the article, so the photo credit and
+        # the photographer's alt text have to reach the twins too.
+        for twin in p["_twins"].values():
+            if meta.get("_photo_credit"):
+                twin["photo_credit"] = meta["_photo_credit"]
+            if meta.get("_photo_alt") and twin["lang"] == DEFAULT_LANG:
+                twin["image_alt"] = meta["_photo_alt"]
+        imagegen.social_card(p["slug"], src["category"], src["title"],
+                             cat_for(src["category"], DEFAULT_LANG).get("name", ""),
+                             os.path.join(DIST, "img", f"{p['slug']}-og.png"),
+                             site_name=CFG["site_name"].upper())
     for s in services:
         if s["lang"] != DEFAULT_LANG:
             continue
         imagegen.social_card(f"service-{s['slug']}", s.get("category", "_default"),
                              s.get("card_title") or s["title"], "Bluestones BPO",
-                             os.path.join(DIST, "img", f"service-{s['slug']}-og.png"))
+                             os.path.join(DIST, "img", f"service-{s['slug']}-og.png"),
+                             site_name=CFG["site_name"].upper())
     print("→ artwork generated")
 
     for p in posts:
