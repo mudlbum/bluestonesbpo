@@ -178,42 +178,60 @@
       "name": "Accounting & Reporting",
       "blurb": "Bookkeeping, K-IFRS conversion, month-end close and the reports your head office actually needs.",
       "accent": "#0C3C60",
-      "meta": "How accounting works in Korea for a foreign-owned subsidiary: statutory books, K-IFRS vs K-GAAP, month-end close, audit thresholds and head-office reporting."
+      "meta": "How accounting works in Korea for a foreign-owned subsidiary: statutory books, K-IFRS vs K-GAAP, month-end close, audit thresholds and head-office reporting.",
+      "name_ko": "회계·결산",
+      "blurb_ko": "기장, K-IFRS 전환, 월 결산, 그리고 본사가 실제로 필요로 하는 보고서.",
+      "meta_ko": "외국계 기업의 한국 회계: 법정장부, K-IFRS와 일반기업회계기준, 월 결산, 외부감사 대상 기준, 본사 보고까지."
     },
     {
       "slug": "payroll",
       "name": "Payroll & HR",
       "blurb": "Monthly payroll, the four major insurances, severance pay, year-end settlement and employment rules.",
       "accent": "#39729B",
-      "meta": "Korean payroll explained for foreign employers: the four major insurances, withholding, severance pay, year-end settlement and the Labor Standards Act obligations that catch newcomers out."
+      "meta": "Korean payroll explained for foreign employers: the four major insurances, withholding, severance pay, year-end settlement and the Labor Standards Act obligations that catch newcomers out.",
+      "name_ko": "급여·인사",
+      "blurb_ko": "월 급여, 4대보험, 퇴직금, 연말정산, 그리고 놓치기 쉬운 근로기준법 의무.",
+      "meta_ko": "외국계 기업의 한국 급여 실무: 4대보험, 원천징수, 퇴직금, 연말정산, 그리고 근로기준법상 사용자 의무."
     },
     {
       "slug": "tax",
       "name": "Tax & VAT",
       "blurb": "VAT cycles, corporate income tax, withholding on cross-border payments and transfer pricing documentation.",
       "accent": "#1EABC7",
-      "meta": "Korean tax compliance for foreign companies: VAT filing cycles, corporate income tax returns, withholding tax on cross-border payments, and transfer pricing documentation."
+      "meta": "Korean tax compliance for foreign companies: VAT filing cycles, corporate income tax returns, withholding tax on cross-border payments, and transfer pricing documentation.",
+      "name_ko": "세무·부가세",
+      "blurb_ko": "부가세 신고 주기, 법인세, 국외 지급 원천징수, 이전가격 문서화.",
+      "meta_ko": "외국계 기업의 한국 세무: 부가세 신고 주기, 법인세 신고, 국외 지급 원천징수, 이전가격 문서화까지."
     },
     {
       "slug": "entity",
       "name": "Entity Setup",
       "blurb": "Branch, liaison office or subsidiary — FDI registration, capital injection and getting the company actually operating.",
       "accent": "#6EA4CA",
-      "meta": "Setting up in Korea: choosing between a subsidiary, branch and liaison office, foreign direct investment registration, capital injection, and the sequence that actually gets you trading."
+      "meta": "Setting up in Korea: choosing between a subsidiary, branch and liaison office, foreign direct investment registration, capital injection, and the sequence that actually gets you trading.",
+      "name_ko": "법인 설립",
+      "blurb_ko": "지점·연락사무소·법인 중 무엇으로 할지, 외국인투자 신고, 자본금 납입, 그리고 실제 영업 개시까지.",
+      "meta_ko": "한국 진출: 현지법인·지점·연락사무소 선택, 외국인투자 신고, 자본금 납입, 그리고 실제로 영업을 시작하는 순서."
     },
     {
       "slug": "compliance",
       "name": "Compliance & Risk",
       "blurb": "Statutory deadlines, audits, foreign exchange rules, internal controls and the penalties for missing them.",
       "accent": "#20303C",
-      "meta": "Staying compliant in Korea: statutory filing deadlines, external audit thresholds, foreign exchange transaction reporting, internal controls, and what non-compliance actually costs."
+      "meta": "Staying compliant in Korea: statutory filing deadlines, external audit thresholds, foreign exchange transaction reporting, internal controls, and what non-compliance actually costs.",
+      "name_ko": "컴플라이언스·리스크",
+      "blurb_ko": "법정 신고기한, 외부감사, 외국환거래 신고, 내부통제, 그리고 놓쳤을 때의 대가.",
+      "meta_ko": "한국에서의 컴플라이언스: 법정 신고기한, 외부감사 대상 기준, 외국환거래 신고, 내부통제, 위반 시 실제 부담."
     },
     {
       "slug": "operations",
       "name": "Operations in Korea",
       "blurb": "Banking, signatories, vendor payments, office setup and running a small Korean operation from abroad.",
       "accent": "#39729B",
-      "meta": "Running a Korean operation from overseas: corporate banking, bank signatory controls, vendor payment cycles, expense management and the practical mechanics of a small local office."
+      "meta": "Running a Korean operation from overseas: corporate banking, bank signatory controls, vendor payment cycles, expense management and the practical mechanics of a small local office.",
+      "name_ko": "한국 운영",
+      "blurb_ko": "법인계좌, 서명권 관리, 협력업체 대금 지급, 사무실 셋업, 해외에서의 원격 운영.",
+      "meta_ko": "해외에서 한국 조직 운영하기: 법인계좌 개설, 서명권 통제, 대금 지급 절차, 비용 관리, 소규모 사무소 실무."
     }
   ],
   "services": [

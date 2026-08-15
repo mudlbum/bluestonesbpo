@@ -387,6 +387,26 @@ def meta_desc(obj, limit=158) -> str:
     return clamp(obj.get("meta") or obj.get("description") or "", limit)
 
 
+def cat_for(c, lang=DEFAULT_LANG) -> dict:
+    """A category dict with name/blurb/meta resolved for `lang`.
+
+    Categories are declared once in site.config.json with English fields plus
+    optional `<field>_<lang>` translations. Without this, a Korean category
+    index inherits the English meta description verbatim — which is both a
+    duplicate-description error and English furniture on a Korean page.
+    Falls back to the English field whenever a translation is absent.
+    """
+    if isinstance(c, str):
+        c = CATS.get(c, {})
+    out = dict(c)
+    if lang != DEFAULT_LANG:
+        for field in ("name", "blurb", "meta"):
+            translated = c.get(f"{field}_{lang}")
+            if translated:
+                out[field] = translated
+    return out
+
+
 def reading_time(text: str, lang=DEFAULT_LANG) -> int:
     if lang == "ko":                      # Korean reads slower per character
         return max(1, round(len(re.sub(r"\s", "", text)) / 500))
@@ -1021,7 +1041,7 @@ def faq_node(obj, url):
 
 # ──────────────────────────────────────────────────────────────── cards ──
 def post_card(p, *, eager=False, size="md"):
-    c = CATS.get(p["category"], {})
+    c = cat_for(p["category"], p["lang"])
     return f"""<article class="card card-{size}">
   <a class="card-media" href="{p['url']}" tabindex="-1" aria-hidden="true">
     <img src="/img/{p['slug']}-hero.webp" alt="" width="1600" height="900"
@@ -1039,7 +1059,7 @@ def post_card(p, *, eager=False, size="md"):
 
 def feature_card(p):
     """The lead article: image left, text right, full content width."""
-    c = CATS.get(p["category"], {})
+    c = cat_for(p["category"], p["lang"])
     return f"""<article class="feature">
   <a class="feature-media" href="{p['url']}" tabindex="-1" aria-hidden="true">
     <img src="/img/{p['slug']}-hero.webp" alt="" width="1600" height="900"
@@ -1136,7 +1156,7 @@ def toc_block(toc, lang, sticky=False):
 
 def render_post(p, all_posts, services):
     lang = p["lang"]
-    cat = CATS.get(p["category"], {})
+    cat = cat_for(p["category"], lang)
     body_html, toc = render_md(transform_callouts(p["body_md"], lang))
     body_html = inject_cta(body_html, lang)
 
@@ -1425,7 +1445,7 @@ def render_insights_index(lang, posts, services):
     if len(cats) > 1:
         chips = "".join(
             f'<a class="chip" href="{pfx(lang)}/blog/{c["slug"]}/">{esc(c["name"])}</a>'
-            for c in cats)
+            for c in (cat_for(c, lang) for c in cats))
         cat_nav = (f'<div class="topic-filter"><span class="topic-label">'
                    f'{T(lang,"browse_topic")}</span><div class="chip-row">{chips}</div></div>')
     graph = [org_node(), website_node(lang),
@@ -1468,6 +1488,7 @@ def render_insights_index(lang, posts, services):
 
 
 def render_category(c, lang, posts, services):
+    c = cat_for(c, lang)
     items = [p for p in posts if p["lang"] == lang and p["category"] == c["slug"]]
     url = f"{SITE}{pfx(lang)}/blog/{c['slug']}/"
     alternates = {l: f"{pfx(l)}/blog/{c['slug']}/" for l in LANGS
@@ -1933,7 +1954,7 @@ Sitemap: {SITE}/sitemap.xml
 <link>{p['abs_url']}</link>
 <guid isPermaLink="true">{p['abs_url']}</guid>
 <description>{esc(p.get('description',''))}</description>
-<category>{esc(CATS.get(p['category'],{}).get('name',''))}</category>
+<category>{esc(cat_for(p['category'], p['lang']).get('name',''))}</category>
 <pubDate>{format_datetime(dt.datetime.fromisoformat(iso(p['date'])))}</pubDate>
 </item>""" for p in en_posts)
     write(os.path.join(DIST, "rss.xml"), f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -2032,14 +2053,14 @@ def build():
 
     imagegen.logo(os.path.join(DIST, "img", "logo.png"))
     for p in posts:
-        meta = {**p, "category_name": CATS.get(p["category"], {}).get("name", "")}
+        meta = {**p, "category_name": cat_for(p["category"], p["lang"]).get("name", "")}
         imagegen.hero(meta, os.path.join(DIST, "img", f"{p['slug']}-hero.webp"))
         if meta.get("_photo_credit"):
             p["photo_credit"] = meta["_photo_credit"]
         if meta.get("_photo_alt"):
             p["image_alt"] = meta["_photo_alt"]
         imagegen.social_card(p["slug"], p["category"], p["title"],
-                             CATS.get(p["category"], {}).get("name", ""),
+                             cat_for(p["category"], p["lang"]).get("name", ""),
                              os.path.join(DIST, "img", f"{p['slug']}-og.png"))
     for s in services:
         if s["lang"] != DEFAULT_LANG:
