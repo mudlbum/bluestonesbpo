@@ -4,8 +4,8 @@ slug: korea-foreign-worker-flat-tax
 seo_title: "외국인근로자 단일세율 21% 인상안"
 meta: "2026년 세제개편안, 외국인근로자 단일세율 19%→21% 인상과 적용기한 2029년말 연장. 외투기업 급여 실무 영향 정리."
 category: tax
-date: 2026-08-14
-updated: 2026-08-14
+date: 2026-08-15
+updated: 2026-08-15
 description: "재정경제부가 2026년 8월 3일 발표한 세제개편안에 외국인근로자 소득세 과세특례 세율을 19%에서 21%로 올리고, 적용기한을 2029년 12월 31일까지 3년 연장하는 내용이 담겼습니다. 확정된 것과 아직 아닌 것을 구분해 정리했습니다."
 image_alt: "외국인근로자 단일세율이 19%에서 21%로 인상되는 개편안을 나타낸 타이포그래피 표지"
 tags: [단일세율, 외국인근로자, 조세특례제한법, 2026 세제개편안, 원천징수, 연말정산, 외투기업, 주재원 급여]
@@ -59,28 +59,28 @@ sources:
   - title: "2026년 세제개편안 발표"
     url: "https://mofe.go.kr/nw/nes/detailNesDtaView.do?searchBbsId1=MOSFBBS_000000000028&searchNttId1=MOSF_000000000078809&menuNo=4010100"
     publisher: "재정경제부"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
     primary: true
   - title: "Tax News Flash — 2026년 세제개편안 (상세본 수록: 외국인근로자 소득세 과세특례 적용세율 상향 19% → 21% 및 적용기한 3년 연장)"
     url: "https://www.pwc.com/kr/ko/insights/tax-news-flash/samilpwc_tax-news-flash_260803_kr.pdf"
     publisher: "삼일회계법인, 2026년 8월"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
   - title: "Korea, Republic of — Individual: Income determination (외국인근로자 과세특례)"
     url: "https://taxsummaries.pwc.com/republic-of-korea/individual/income-determination"
     publisher: "PwC Worldwide Tax Summaries, 2026년 7월 2일 기준"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
   - title: "Korea, Republic of — Individual: Taxes on personal income (종합소득세율 및 지방소득세 10%)"
     url: "https://taxsummaries.pwc.com/republic-of-korea/individual/taxes-on-personal-income"
     publisher: "PwC Worldwide Tax Summaries, 2026년 7월 2일 기준"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
   - title: "Korea tax overhaul rewards resident homeowners, targets multiple properties — 외국인근로자 단일세율 21% 인상"
     url: "https://www.koreaherald.com/article/10829532"
     publisher: "The Korea Herald, 2026년 8월"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
   - title: "조세특례제한법 영문 번역본"
     url: "https://elaw.klri.re.kr/eng_service/lawView.do?hseq=43262&lang=ENG"
     publisher: "한국법제연구원"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
     primary: true
 ---
 
@@ -160,4 +160,4 @@ sources:
 
 솔직한 단서 하나. 외국인 근로자가 두어 명이고 계약이 전부 gross 기준이라면, 이 개정은 스프레드시트의 한 줄일 뿐이고 도움이 필요하지 않습니다. 노출은 인원 수, 직급, 그리고 계약서가 세부담 위험을 회사로 얼마나 옮겨 놨는지에 비례합니다.
 
-*2026년 8월 14일 기준. 19% 세율과 2026년 12월 31일 적용기한은 현행법이며, 21% 세율과 2029년 12월 31일 기한은 재정경제부가 2026년 8월 3일 발표한 정부안으로 국회 심의 과정에서 수정되거나 부결될 수 있습니다. 각 수치의 출처는 위에 링크돼 있습니다. 일반적인 제도 설명이며 개별 회사·개인의 세무 판단에 대한 자문이 아닙니다.*
+*2026년 8월 15일 기준. 19% 세율과 2026년 12월 31일 적용기한은 현행법이며, 21% 세율과 2029년 12월 31일 기한은 재정경제부가 2026년 8월 3일 발표한 정부안으로 국회 심의 과정에서 수정되거나 부결될 수 있습니다. 각 수치의 출처는 위에 링크돼 있습니다. 일반적인 제도 설명이며 개별 회사·개인의 세무 판단에 대한 자문이 아닙니다.*

@@ -4,8 +4,8 @@ slug: korea-foreign-worker-flat-tax
 seo_title: "Korea Foreign Flat Tax Rising to 21%"
 meta: "Korea's 2026 tax reform proposes raising the foreign-worker flat rate from 19% to 21% and extending eligibility to end-2029. What it costs your expat payroll."
 category: tax
-date: 2026-08-14
-updated: 2026-08-14
+date: 2026-08-15
+updated: 2026-08-15
 description: "The Ministry of Economy and Finance proposed on 3 August 2026 to raise the optional flat income tax rate for foreign employees from 19% to 21%, while extending the entry window from end-2026 to end-2029. Here is what changes, what does not, and what a foreign-invested employer should be modelling now."
 image_alt: "Typographic cover showing the proposed rise in Korea's foreign-worker flat income tax rate from 19 to 21 percent"
 tags: [flat tax rate, foreign employees, expatriate payroll, 2026 tax reform, restriction of special taxation act, withholding tax, year-end settlement, 단일세율]
@@ -59,28 +59,28 @@ sources:
   - title: "2026년 세제개편안 발표 (2026 Tax Reform Plan)"
     url: "https://mofe.go.kr/nw/nes/detailNesDtaView.do?searchBbsId1=MOSFBBS_000000000028&searchNttId1=MOSF_000000000078809&menuNo=4010100"
     publisher: "Ministry of Economy and Finance"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
     primary: true
   - title: "Tax News Flash — 2026년 세제개편안, reproducing the Ministry's detailed annex including 외국인근로자 소득세 과세특례 적용세율 상향(19% → 21%)"
     url: "https://www.pwc.com/kr/ko/insights/tax-news-flash/samilpwc_tax-news-flash_260803_kr.pdf"
     publisher: "Samil PwC, August 2026"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
   - title: "Korea, Republic of — Individual: Income determination (special tax concession for foreigners working in Korea)"
     url: "https://taxsummaries.pwc.com/republic-of-korea/individual/income-determination"
     publisher: "PwC Worldwide Tax Summaries, reviewed 2 July 2026"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
   - title: "Korea, Republic of — Individual: Taxes on personal income (progressive brackets and the 10% local income tax)"
     url: "https://taxsummaries.pwc.com/republic-of-korea/individual/taxes-on-personal-income"
     publisher: "PwC Worldwide Tax Summaries, reviewed 2 July 2026"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
   - title: "Korea tax overhaul rewards resident homeowners, targets multiple properties — foreign-worker flat tax rises to 21%"
     url: "https://www.koreaherald.com/article/10829532"
     publisher: "The Korea Herald, August 2026"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
   - title: "Act on Restriction on Special Cases Concerning Taxation (English translation)"
     url: "https://elaw.klri.re.kr/eng_service/lawView.do?hseq=43262&lang=ENG"
     publisher: "Korea Legislation Research Institute"
-    accessed: 2026-08-14
+    accessed: 2026-08-15
     primary: true
 ---
 
@@ -158,4 +158,4 @@ If you are working out how the change lands across a specific Korean payroll —
 
 One honest caveat. If your Korean entity has two foreign employees on modest salaries and no tax-equalisation clauses, this change is a line in a spreadsheet and you do not need help with it. The exposure scales with headcount, with seniority, and with how much of the tax risk your contracts have quietly transferred to the company.
 
-*Figures current as at 14 August 2026. The 19% rate and the 31 December 2026 entry deadline are the law in force; the 21% rate and the 31 December 2029 deadline are proposals published by the Ministry of Economy and Finance on 3 August 2026 and are subject to amendment or rejection by the National Assembly. Each figure is linked to the authority it was read from above. This is general information about how Korean rules operate, not advice on any individual's or company's tax position.*
+*Figures current as at 15 August 2026. The 19% rate and the 31 December 2026 entry deadline are the law in force; the 21% rate and the 31 December 2029 deadline are proposals published by the Ministry of Economy and Finance on 3 August 2026 and are subject to amendment or rejection by the National Assembly. Each figure is linked to the authority it was read from above. This is general information about how Korean rules operate, not advice on any individual's or company's tax position.*

@@ -541,6 +541,25 @@ def _pair_translations(items):
     return items
 
 
+def _recency_key(p):
+    """Sort key for "newest first".
+
+    `date:` may carry a time (`2026-08-15 14:30`) as well as a bare date. Where
+    two posts share a day, the one with the later time wins; a bare date is
+    treated as 09:00 KST, matching what `iso()` publishes.
+
+    The tiebreaker of last resort is the slug ASCENDING, which — because the
+    sort is reversed — puts an earlier slug first. That is arbitrary either way,
+    but it is deliberately NOT the slug descending: that quietly buried a new
+    post beneath older same-day ones purely because of its first letter.
+    """
+    d = p["date"]
+    if isinstance(d, str):
+        d = dt.date.fromisoformat(d)
+    stamp = d if isinstance(d, dt.datetime) else dt.datetime(d.year, d.month, d.day, 9, 0)
+    return (stamp, tuple(-ord(ch) for ch in p["slug"]))
+
+
 def load_posts():
     posts = _load_dir("posts", "post")
     for p in posts:
@@ -550,7 +569,7 @@ def load_posts():
         p["url"] = f"{pfx(p['lang'])}/blog/{p['category']}/{p['slug']}/"
         p["abs_url"] = SITE + p["url"]
     _pair_translations(posts)
-    posts.sort(key=lambda p: (str(p["date"]), p["slug"]), reverse=True)
+    posts.sort(key=_recency_key, reverse=True)
     return posts
 
 
