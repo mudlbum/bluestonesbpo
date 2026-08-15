@@ -73,6 +73,43 @@ Not every article needs both languages. Publish Korean where a Korean-speaking a
 exists for the topic — anything a Korean finance staffer at a foreign company would search.
 Skip it where the audience is purely the overseas parent.
 
+In practice **most payroll and tax operational topics get both**. 퇴직금, 최저임금, 연말정산,
+4대보험, 단일세율 and the filing calendar are searched in Korean by the person who actually does
+the work. Entity-choice and market-entry pieces aimed at a head office still deciding whether to
+come to Korea usually are not. When in doubt write the Korean: it is the thinner side of this
+site, and Naver indexes nothing that does not exist.
+
+**Write the Korean version in the same run as the English one.** Backfilling later is how the
+English site ends up with ten articles and the Korean site with one.
+
+## Artwork
+
+Heroes and social cards are generated at build time. Nothing to source, download or license.
+
+**Text drawn onto artwork is always English.** The bundled faces — Instrument Sans and Geist
+Mono in `assets/fonts/` — carry no Hangul, so a Korean headline rendered onto a hero or an OG
+card comes out as tofu boxes. `build.py` takes artwork text from the English twin: the two
+languages share a slug, so they share one image file and it is drawn once, from the English
+title and the English category name.
+
+* **Do not add a Hangul font to work around this.** If that is ever wanted it is a deliberate
+  design decision, not something to slip into a daily run.
+* **`image_text:`** overrides the headline on artwork only — the escape hatch for a Korean-only
+  post. Set a short English line. `image_alt:` stays in the page's own language; it is
+  screen-reader text and is never drawn.
+* The masthead comes from `site_name` in `site.config.json`. Never hardcode it — it read
+  "FUTURE OF KOREA" on every card for a while because it had been.
+
+## Dates
+
+`date:` is the publication date **in the site's own timezone, KST**. The machine running the
+daily job may be on another clock — check with `TZ=Asia/Seoul date` before setting it rather
+than trusting the environment's idea of today. Getting this wrong dates a post to yesterday and
+sorts it below posts it should lead.
+
+Where two posts share a day, `date:` may carry a time (`2026-08-15 14:30`) and the later one
+sorts first. A bare date is treated as 09:00 KST.
+
 ## Categories
 
 | slug | use for |

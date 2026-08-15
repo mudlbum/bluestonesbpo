@@ -8,10 +8,16 @@ and shell access to this repository.
 ```bash
 cd <REPO>
 git pull --rebase
+TZ=Asia/Seoul date          # the publication date is the KST date, not the runner's
 ```
 
 Read `CLAUDE.md` if it is not already in context. Read
 `content/_data/published-topics.md` — regenerated on every build — so you know what exists.
+
+**Check today's date in Seoul before anything else.** The machine running this job may be on
+a clock thirteen hours behind KST, and a post dated to the runner's "today" is dated to
+yesterday in the timezone the site publishes in. That mis-sorts it below posts it should lead
+and makes it look like nothing was published.
 
 ## 1. Choose today's topic
 
@@ -111,17 +117,74 @@ the overseas parent, skip it.
 ```bash
 python3 build.py
 python3 scripts/validate.py     # must exit 0
-git add -A
-git commit -m "post: <slug>"
-git push
 ```
 
-GitHub Actions rebuilds and deploys. Artwork is generated during the build — nothing to
-source, download or license.
-
 If `validate.py` fails, **fix the cause, do not weaken the check.** The gate exists because
-the site it replaced shipped `nofollow, nosnippet` on every page for years and nobody
-noticed.
+the site it replaced shipped `nofollow, nosnippet` on every page for years and nobody noticed.
+
+### If the build cannot clear `dist/`
+
+The repo lives on a OneDrive mount that sometimes refuses `unlink` on build artefacts, and
+`build.py` dies with `PermissionError` on a stale PNG. Do not build over the top — validation
+would then be reading files the current code did not produce. Build a clean copy instead:
+
+```bash
+rm -rf /tmp/bs && mkdir -p /tmp/bs
+tar cf - --exclude=dist --exclude='dist.stale-*' --exclude=.git --exclude=__pycache__ . \
+  | (cd /tmp/bs && tar xf -)
+cd /tmp/bs && python3 build.py && python3 scripts/validate.py
+```
+
+`dist/` is git-ignored and CI rebuilds it from scratch, so a scratch build proves exactly what
+CI will see. Orphaned `dist.stale-*` directories are harmless; mention them and move on.
+
+### Committing
+
+The same mount leaves stale git lock files behind. Clear them first, then commit:
+
+```bash
+for f in $(find .git -name "*.lock" ! -name "*.dead"); do mv "$f" "$f.dead"; done
+git add -A && git -c core.fileMode=false commit -m "post: <slug>"
+```
+
+`warning: unable to unlink .git/objects/**/tmp_obj_*` is noise from the mount, not a failure —
+check for the `[main <sha>]` line to confirm the commit landed.
+
+### Pushing — the sandbox cannot reach github.com
+
+`git push` from bash fails with `could not read Username for 'https://github.com'`. There are
+no credentials in the sandbox and you must not ask for any. Push through the GitHub Desktop app
+on the user's machine:
+
+1. `request_access` for **GitHub Desktop**. In a scheduled run this is refused unless the app is
+   already listed in the task's settings — if it is refused, commit locally, say plainly that
+   the push did not happen, and stop. Do not claim it succeeded.
+2. `open_application` GitHub Desktop, then click its taskbar icon to bring the window forward.
+   Clicking the taskbar needs a `request_access` for **File Explorer** (the Windows shell).
+3. Confirm the repo is `bluestonesbpo` and the branch is `main`. If the toolbar reads
+   **Push origin ↑N**, click it. If it reads **Fetch origin**, click that first — the app's view
+   of the branch can predate a commit made from bash — then re-check.
+4. Screenshot to confirm: the ↑N badge disappears and the button returns to "Fetch origin".
+
+### Verify the deploy — not just the URL
+
+Wait ~90 seconds, then check the article is actually **reachable and in the right place**:
+
+```
+https://mudlbum.github.io/bluestonesbpo/blog/<category>/<slug>/
+https://mudlbum.github.io/bluestonesbpo/ko/blog/<category>/<slug>/   # if bilingual
+https://mudlbum.github.io/bluestonesbpo/blog/                        # must lead with today's post
+```
+
+A resolving URL is not proof the post is visible. Check that it leads the blog index and the
+homepage's "From the blog" block. A post that exists but sorts third looks missing to the
+person who asked for it.
+
+If a run is red, open the failed job at
+<https://github.com/mudlbum/bluestonesbpo/actions>, read the log, fix the cause and push again.
+
+The `noindex,nofollow` on every page is **intentional** while `staging.enabled` is set in
+`site.config.json` — the banner says so. Do not "fix" it.
 
 ## 6. Weekly housekeeping
 
