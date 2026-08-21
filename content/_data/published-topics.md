@@ -3,6 +3,8 @@
 Read this before choosing today's story. Do not re-cover any of these;
 either write something new or update the existing article in place.
 
+- **2026-08-21 22:40:00** — Korea's KRW 100 Million FDI Threshold: What Foreign-Invested Company Status Actually Buys  
+  `korea-fdi-threshold-foreign-invested-company` · branch office, company registration, d-8 visa, foreign direct investment, foreign invested company, foreign investment promotion act
 - **2026-08-21** — Korea's 52-Hour Week: How Overtime Is Counted, and Why Payroll Uses a Different Number  
   `korea-52-hour-week-overtime` · 52-hour week, invest korea, korean payroll, labor standards act, ministry of employment and labor, night work
 - **2026-08-18** — Korean VAT for a Foreign-Owned Company: Four Filings a Year, and What Kills Input VAT  
