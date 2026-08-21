@@ -3,6 +3,8 @@
 Read this before choosing today's story. Do not re-cover any of these;
 either write something new or update the existing article in place.
 
+- **2026-08-21** — Korea's 52-Hour Week: How Overtime Is Counted, and Why Payroll Uses a Different Number  
+  `korea-52-hour-week-overtime` · 52-hour week, invest korea, korean payroll, labor standards act, ministry of employment and labor, night work
 - **2026-08-18** — Korean VAT for a Foreign-Owned Company: Four Filings a Year, and What Kills Input VAT  
   `korea-vat-filing-foreign-company` · foreign invested company, hometax, input vat, invest korea, national tax service, tax invoice
 - **2026-08-16** — Korea's Corporate Tax Interim Payment Is Due 31 August — and the Rate Went Up  
