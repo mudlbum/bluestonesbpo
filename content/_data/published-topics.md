@@ -3,6 +3,20 @@
 Read this before choosing today's story. Do not re-cover any of these;
 either write something new or update the existing article in place.
 
+- **2026-08-28 22:30:00** — Entertainment Expenses in Korea: The KRW 30,000 Card Rule, and the Ceiling Above It  
+  `korea-business-promotion-expense-limit` · business promotion expenses, corporate credit card, corporate income tax, corporate tax act, deductible expenses, entertainment expenses
+- **2026-08-28 21:00:00** — Unpaid Wages Become a Five-Year Offence in Korea on 8 October  
+  `korea-wage-arrears-criminal-penalty` · criminal liability, employee retirement benefit security act, foreign employers, korea ministry of government legislation, korean payroll, labor standards act
+- **2026-08-28 09:00:00** — Rules of Employment in Korea: The Filing That Starts at Your Tenth Hire  
+  `korea-rules-of-employment` · compliance filing, employee handbook korea, enforcement decree of the labor standards act, foreign employers, korean payroll, labor standards act
+- **2026-08-26 21:00:00** — Which Foreign Employees Can Skip Korean National Pension — and the Form That Proves It  
+  `korea-pension-exemption-foreign-employees` · certificate of coverage, expatriate payroll, foreign employees, korean payroll, lump-sum refund, ministry of health and welfare
+- **2026-08-24 20:00:00** — Unused Annual Leave in Korea: The Cash You Still Owe After It Expires  
+  `korea-unused-annual-leave-allowance` · annual leave, foreign employers, invest korea, korean payroll, labor standards act, leave accrual
+- **2026-08-24** — Paying Your Foreign Parent from Korea: 22% by Default, and a New Filing From 2026  
+  `korea-withholding-tax-foreign-parent` · beneficial ownership, corporate tax act, dividends, foreign parent, korea legislation research institute, limited tax rate
+- **2026-08-22** — Does Your Korean Subsidiary Need an External Audit? It Is a Two-of-Four Test  
+  `korea-external-audit-threshold` · act on external audit of stock companies, audit threshold, external audit, financial supervisory service, foreign invested company, k-gaap
 - **2026-08-21 22:40:00** — Korea's KRW 100 Million FDI Threshold: What Foreign-Invested Company Status Actually Buys  
   `korea-fdi-threshold-foreign-invested-company` · branch office, company registration, d-8 visa, foreign direct investment, foreign invested company, foreign investment promotion act
 - **2026-08-21** — Korea's 52-Hour Week: How Overtime Is Counted, and Why Payroll Uses a Different Number  
