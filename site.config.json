@@ -7,7 +7,7 @@
   "lang": "en",
   "timezone": "Asia/Seoul",
   "staging": {
-    "enabled": true,
+    "enabled": false,
     "domain": "https://mudlbum.github.io/bluestonesbpo",
     "note": "While enabled the build uses the staging domain, emits noindex,nofollow on every page, serves a Disallow-all robots.txt, and shows a banner. This is the ONE case where noindex is correct: a reachable copy of the site that Google indexes is duplicate content competing with the real thing. Set enabled:false at go-live and the site returns to fully indexable with the production domain. If the staging domain includes a path (a GitHub Pages project site such as https://user.github.io/repo), the build detects it, rewrites every root-relative link to sit under that path, and skips the CNAME file. Swap this to a real subdomain like https://new.bluestonesbpo.co.kr once DNS exists and the rewriting turns itself off."
   },
