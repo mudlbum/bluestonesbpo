@@ -40,14 +40,19 @@ UA = "bluestonesbpo-build/1.0 (+https://www.bluestonesbpo.com/)"
 
 # Fallback search terms per category. Deliberately concrete and Korea-anchored:
 # generic "business" stock photography is what makes a site look like a template.
+#
+# These are this site's categories. They previously listed markets/technology/
+# living/society/policy/kcontent — the categories of a different site — so every
+# Bluestones post missed the lookup, fell through to `_default`, and searched the
+# same string. That, not the ranking, is why photo heroes repeated.
 CATEGORY_TERMS = {
-    "markets":    "Seoul financial district skyline trading",
-    "technology": "semiconductor wafer fabrication clean room",
-    "living":     "Seoul street daily life neighbourhood",
-    "society":    "Seoul crowd people city street",
-    "policy":     "Seoul government building architecture",
-    "kcontent":   "Seoul concert stage lights performance",
-    "_default":   "Seoul South Korea skyline",
+    "accounting": "accountant ledger financial statements desk",
+    "payroll":    "payroll calculator salary documents desk",
+    "tax":        "tax forms paperwork calculator desk",
+    "entity":     "Seoul business district office buildings",
+    "compliance": "filing cabinet documents government office",
+    "operations": "modern office workspace team meeting",
+    "_default":   "Seoul business district office",
 }
 
 # Subject → a scene that actually exists in a stock library.
@@ -61,35 +66,54 @@ CATEGORY_TERMS = {
 #
 # Order matters: the first pattern that matches wins, so put specific subjects
 # above general ones.
+# Ordered most specific first, because the first match wins and this site's
+# vocabulary overlaps heavily — nearly every payroll article carries a "korean
+# payroll" tag, and statute names drag in words the article is not about. Two
+# patterns are deliberately narrow for that reason: `severance` does not include
+# "retirement benefit" (it appears in the Guarantee of Employees' Retirement
+# Benefits Act, cited by articles that are not about severance), and the VAT rule
+# does not include "hometax" (every tax article mentions the portal).
 CONCEPT_MAP: list[tuple[str, str]] = [
-    (r"\b(visa|immigration|e-7|f-2|residence|hikorea|passport)",
+    (r"\b(maternity|parental|spousal|childcare|miscarriage|childbirth)",
+     "parent newborn baby family home"),
+    (r"\b(penalt|fine|criminal|prosecut|court|offence|arrears)",
+     "courthouse law justice columns"),
+    (r"\b(rules of employment|employment contract|termination|dismissal|disciplinary)",
+     "signing contract documents desk"),
+    (r"\b(filing calendar|compliance calendar|filing deadline|filing schedule|tax calendar)",
+     "desk calendar deadline planner"),
+    (r"\b(severance|퇴직금)",
+     "retirement savings planning documents"),
+    (r"\b(entertainment expense|promotion expense|corporate card|business meal)",
+     "restaurant dinner bill receipt"),
+    (r"\b(foreign parent|dividend|royalt|tax treaty|beneficial owner|repatriat)",
+     "international money transfer finance"),
+    # Above the entity rule: "subsidiary" appears in the title of articles that
+    # are about something else happening to one. Below the two rules above it,
+    # because "tax audit" is a common tag on articles that are not about audits.
+    (r"\b(audit|k-ifrs|k-gaap|bookkeep|month-end|financial statement)",
+     "auditor reviewing financial statements"),
+    (r"\b(fdi|subsidiary|branch office|liaison office|company registration|incorporat)",
+     "Seoul business district office towers"),
+    (r"\b(visa|immigration|e-7|d-8|residence permit|hikorea|passport)",
      "passport immigration documents desk"),
-    (r"\b(semiconductor|chip|hbm|memory|wafer|foundry|fab)",
-     "semiconductor wafer microchip technology"),
-    (r"\b(birth|fertility|demograph|population|ageing|aging|marriage)",
-     "family children park generations"),
-    (r"\b(won|krw|currency|fx|exchange rate|forex)",
-     "currency exchange banknotes money"),
-    (r"\b(kospi|kosdaq|stock|equit|index|etf|share)",
-     "stock market chart trading screen"),
-    (r"\b(bank of korea|interest rate|inflation|cpi|monetary)",
-     "central bank building finance"),
-    (r"\b(shipbuild|shipyard|vessel)", "shipyard crane vessel construction"),
-    (r"\b(defence|defense|arms|military)", "defence industry aerospace"),
-    (r"\b(battery|ev|electric vehicle|secondary cell)",
-     "electric vehicle battery manufacturing"),
-    (r"\b(export|trade|shipping|customs|container|port)",
-     "container port shipping cargo"),
-    (r"\b(housing|property|jeonse|apartment|real estate)",
-     "Seoul apartment buildings housing"),
-    (r"\b(tax|pension|insurance|nhis|nts)", "tax paperwork calculator desk"),
-    (r"\b(k-pop|kpop|idol|concert|album|hybe|entertainment)",
-     "concert stage lights crowd performance"),
-    (r"\b(drama|film|cinema|netflix|streaming|content)",
-     "film production camera set"),
-    (r"\b(tourism|tourist|travel|visitor)", "Seoul tourists landmark travel"),
-    (r"\b(labour|labor|employment|job|hiring|worker)", "office workers meeting"),
-    (r"\b(regional|rural|province|depopulat)", "Korean rural town countryside"),
+    (r"\b(annual leave|chuseok|seollal|substitute holiday|public holiday)",
+     "wall calendar planner dates"),
+    (r"\b(52-hour|working hour|overtime|night work|shift)",
+     "office clock late working desk"),
+    (r"\b(vat|tax invoice|input tax|부가가치세)",
+     "invoice receipts bookkeeping desk"),
+    (r"\b(withholding|corporate tax|income tax|interim payment|tax treaty"
+     r"|transfer pricing|flat tax|entertainment expense|promotion expense)",
+     "tax forms calculator accounting desk"),
+    (r"\b(pension|health insurance|four major insurance|4대보험|nhis|comwel)",
+     "insurance policy documents signing"),
+    (r"\b(minimum wage|payroll|payslip|salary|wage|연말정산|year-end settlement)",
+     "payroll calculator salary paperwork"),
+    (r"\b(bank|signator|foreign exchange|remittance)",
+     "bank building finance counter"),
+    (r"\b(employment|hiring|worker|staff|headcount|employee)",
+     "office workers team meeting"),
 ]
 
 STOPWORDS = {"the", "and", "for", "with", "from", "that", "this", "what", "how",
@@ -131,10 +155,13 @@ def query_for(post: dict) -> str:
     if post.get("photo_query"):
         return str(post["photo_query"])
 
+    # Title and tags only. `about:` holds statute and institution names — every
+    # payroll article cites the Labor Standards Act and half of them name the
+    # National Tax Service — so feeding it in here matched articles to whatever
+    # law they happened to quote rather than what they are about.
     haystack = " ".join([
         str(post.get("title", "")),
         " ".join(str(t) for t in (post.get("tags") or [])),
-        " ".join(str(t) for t in (post.get("about") or [])),
     ]).lower()
 
     for pattern, concept in CONCEPT_MAP:
@@ -142,6 +169,29 @@ def query_for(post: dict) -> str:
             return concept
 
     return CATEGORY_TERMS.get(post.get("category", "_default"), CATEGORY_TERMS["_default"])
+
+
+def _claimed(index: dict, slug: str) -> set[str]:
+    """Photo ids already used by some *other* post.
+
+    Without this, two posts that resolve to the same query take the same
+    top-ranked result and the archive shows the same photograph twice. Keyed on
+    the Pexels id rather than the URL because the API returns several size
+    variants of one image under different URLs.
+    """
+    used = set()
+    for other, rec in index.items():
+        if other == slug:
+            continue                                  # a post may keep its own
+        pid = rec.get("photo_id")
+        if pid:
+            used.add(str(pid))
+        elif rec.get("source_url"):                   # records written before ids
+            # .../photo/two-people-signing-a-form-31415926/ → 31415926
+            m = re.search(r"(\d+)/?$", rec["source_url"])
+            if m:
+                used.add(m.group(1))
+    return used
 
 
 def _terms(text: str) -> set[str]:
@@ -176,7 +226,9 @@ def fetch(post: dict, *, offline: bool = False) -> dict | None:
         return None
 
     q = query_for(post)
-    url = f"{API}?{urllib.parse.urlencode({'query': q, 'orientation': 'landscape', 'per_page': 15, 'size': 'large'})}"
+    # 30 rather than 15: candidates already used by another post are skipped, so
+    # the pool has to be deep enough to still hold a relevant unused one.
+    url = f"{API}?{urllib.parse.urlencode({'query': q, 'orientation': 'landscape', 'per_page': 30, 'size': 'large'})}"
     try:
         req = urllib.request.Request(url, headers={"Authorization": key, "User-Agent": UA})
         with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
@@ -196,9 +248,14 @@ def fetch(post: dict, *, offline: bool = False) -> dict | None:
               "— using typographic cover instead")
         return None
 
+    claimed = _claimed(index, slug)
+    skipped = 0
     for photo in ranked:
         if relevance(photo, q) < MIN_RELEVANCE:
             break
+        if str(photo.get("id", "")) in claimed:
+            skipped += 1
+            continue                                       # already another post's
         src = (photo.get("src") or {}).get("large2x") or (photo.get("src") or {}).get("large")
         credit = (photo.get("photographer") or "").strip()
         if not src or not credit:
@@ -215,6 +272,7 @@ def fetch(post: dict, *, offline: bool = False) -> dict | None:
 
         rec = {
             "path": os.path.relpath(dest, ROOT).replace("\\", "/"),
+            "photo_id": str(photo.get("id", "")),
             # Pexels supplies its own description of the photo. Using it keeps the
             # alt text truthful once a post's artwork changes from generated art
             # to a photograph — otherwise the old alt silently describes an image
@@ -228,10 +286,12 @@ def fetch(post: dict, *, offline: bool = False) -> dict | None:
         }
         index[slug] = rec
         _save_index(index)
-        print(f"  photos: {slug} ← “{q}” by {credit}")
+        note = f" ({skipped} already used)" if skipped else ""
+        print(f"  photos: {slug} ← “{q}” by {credit}{note}")
         return {**rec, "path": dest}
 
-    print(f"  photos: no usable result for {slug} (“{q}”) — falling back to cover")
+    print(f"  photos: no unused relevant result for {slug} (“{q}”, "
+          f"{skipped} candidates already used) — falling back to cover")
     return None
 
 

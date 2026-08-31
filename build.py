@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import glob
 import html
 import json
 import os
@@ -2084,6 +2085,22 @@ def build():
                       f"!! Building over the top. Validation results may reflect stale\n"
                       f"!! files from an earlier build — verify with a clean directory:\n"
                       f"!!     BSB_DIST=/tmp/dist-check python3 build.py")
+
+    # Reap whatever earlier runs moved aside. Each fallback above leaves a
+    # ~15MB tree behind, and on a mount that refuses unlink they accumulate one
+    # per build until someone notices. Deletion is attempted every time and
+    # ignored when it fails: the same mount that forced the rename usually
+    # refuses the delete too, but a later native run on the host can clear them.
+    reaped = 0
+    for name in sorted(glob.glob(f"{DIST}.stale-*")):
+        try:
+            shutil.rmtree(name)
+            reaped += 1
+        except OSError:
+            pass
+    if reaped:
+        print(f"→ cleared {reaped} stale dist director{'y' if reaped == 1 else 'ies'}")
+
     os.makedirs(DIST, exist_ok=True)
 
     posts, services, pages = load_posts(), load_services(), load_pages()
