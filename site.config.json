@@ -2,14 +2,14 @@
   "site_name": "Bluestones BPO",
   "tagline": "Your companion in Korea.",
   "strapline": "Accounting, payroll and operations outsourcing for foreign companies in South Korea.",
-  "domain": "https://www.bluestonesbpo.com",
+  "domain": "https://www.bluestonesbpo.co.kr",
   "locale": "en_US",
   "lang": "en",
   "timezone": "Asia/Seoul",
   "staging": {
     "enabled": true,
     "domain": "https://mudlbum.github.io/bluestonesbpo",
-    "note": "While enabled the build uses the staging domain, emits noindex,nofollow on every page, serves a Disallow-all robots.txt, and shows a banner. This is the ONE case where noindex is correct: a reachable copy of the site that Google indexes is duplicate content competing with the real thing. Set enabled:false at go-live and the site returns to fully indexable with the production domain. If the staging domain includes a path (a GitHub Pages project site such as https://user.github.io/repo), the build detects it, rewrites every root-relative link to sit under that path, and skips the CNAME file. Swap this to a real subdomain like https://new.bluestonesbpo.com once DNS exists and the rewriting turns itself off."
+    "note": "While enabled the build uses the staging domain, emits noindex,nofollow on every page, serves a Disallow-all robots.txt, and shows a banner. This is the ONE case where noindex is correct: a reachable copy of the site that Google indexes is duplicate content competing with the real thing. Set enabled:false at go-live and the site returns to fully indexable with the production domain. If the staging domain includes a path (a GitHub Pages project site such as https://user.github.io/repo), the build detects it, rewrites every root-relative link to sit under that path, and skips the CNAME file. Swap this to a real subdomain like https://new.bluestonesbpo.co.kr once DNS exists and the rewriting turns itself off."
   },
   "languages": [
     {
@@ -32,7 +32,7 @@
     "name": "Bluestones BPO",
     "legal_name": "Bluestones BPO",
     "type": "AccountingService",
-    "email": "info@bluestonesbpo.com",
+    "email": "info@bluestonesbpo.co.kr",
     "telephone": "+82-2-515-4534",
     "fax": "+82-2-515-4536",
     "founded": "2020",

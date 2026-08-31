@@ -91,4 +91,4 @@ BPO에 귀속됩니다.
 
 ## 11. 문의
 
-**블루스톤즈 BPO** · info@bluestonesbpo.com · +82 2 515 4534
+**블루스톤즈 BPO** · info@bluestonesbpo.co.kr · +82 2 515 4534

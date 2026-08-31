@@ -36,7 +36,7 @@ PHOTO_DIR = os.path.join(ROOT, "assets", "photos")
 INDEX = os.path.join(ROOT, "content", "_data", "photos.json")
 API = "https://api.pexels.com/v1/search"
 TIMEOUT = 20
-UA = "bluestonesbpo-build/1.0 (+https://www.bluestonesbpo.com/)"
+UA = "bluestonesbpo-build/1.0 (+https://www.bluestonesbpo.co.kr/)"
 
 # Fallback search terms per category. Deliberately concrete and Korea-anchored:
 # generic "business" stock photography is what makes a site look like a template.
@@ -58,14 +58,12 @@ CATEGORY_TERMS = {
 # Subject → a scene that actually exists in a stock library.
 #
 # This is the crux of the relevance problem. An article's own vocabulary is
-# abstract — "HBM4 qualification", "F-2-R regional track", "margin debt" — and
-# no photographer has ever tagged an image with those words. Searching them
-# returns whatever the engine falls back to, which is how you end up with a
-# picture of nothing in particular. So we translate the subject into something
-# photographable first, and search for that.
+# abstract — "간이지급명세서", "two-of-four audit test", "limited tax rate" — and no
+# photographer has ever tagged an image with those words. Searching them returns
+# whatever the engine falls back to, which is how you end up with a picture of
+# nothing in particular. So we translate the subject into something photographable
+# first, and search for that.
 #
-# Order matters: the first pattern that matches wins, so put specific subjects
-# above general ones.
 # Ordered most specific first, because the first match wins and this site's
 # vocabulary overlaps heavily — nearly every payroll article carries a "korean
 # payroll" tag, and statute names drag in words the article is not about. Two

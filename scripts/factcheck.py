@@ -59,7 +59,7 @@ MIN_PRIMARY = 1
 MAX_SOURCE_AGE_DAYS = 400
 MIN_QUANTIFIED = 0.6   # share of takeaways that must carry a figure
 URL_TIMEOUT = 12
-USER_AGENT = "bluestonesbpo-linkcheck/1.0 (+https://www.bluestonesbpo.com/)"
+USER_AGENT = "bluestonesbpo-linkcheck/1.0 (+https://www.bluestonesbpo.co.kr/)"
 
 # Seoul time, not the machine's time.
 #

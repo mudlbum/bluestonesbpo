@@ -213,7 +213,7 @@ than a firm that published nothing. The quota is a tool for consistency, not an 
 
 Traffic does not arrive because content exists. In order:
 
-1. Verify the site is indexed: search `site:bluestonesbpo.com` in Google.
+1. Verify the site is indexed: search `site:bluestonesbpo.co.kr` in Google.
 2. Submit the sitemap in Google Search Console **and** in Naver Search Advisor (the Korean
    pages are worthless without the latter — Naver has a large share of Korean search).
 3. Register the business in Google Business Profile with the same NAP as

@@ -7,7 +7,7 @@ this site gets visitors — skipping them makes everything else pointless.
 
 ## 0. Things only you can decide
 
-- [ ] **Confirm the domain.** `site.config.json` is set to `https://www.bluestonesbpo.com`,
+- [ ] **Confirm the domain.** `site.config.json` is set to `https://www.bluestonesbpo.co.kr`,
       inferred from your email address. If the real domain differs, change `domain` there —
       it drives canonicals, sitemap, hreflang, `llms.txt` and the `CNAME` file.
 - [ ] **Verify the address.** The site publishes `Construction Building #711, Eonju-ro,
@@ -48,16 +48,16 @@ git push -u origin main
 
 ### 1a. Staging first — this is where the build currently points
 
-`www.bluestonesbpo.com` is **already live and serving the Wix site**, so the build ships
+`www.bluestonesbpo.co.kr` is **already live and serving the Wix site**, so the build ships
 in staging mode. `staging.enabled` is `true` in `site.config.json`, which makes it use
-`new.bluestonesbpo.com`, emit `noindex,nofollow` on every page, serve a `Disallow: /`
+`new.bluestonesbpo.co.kr`, emit `noindex,nofollow` on every page, serve a `Disallow: /`
 robots.txt, and show an orange banner. Nothing about the live Wix site changes.
 
 - [ ] DNS at your registrar: add a `CNAME` record — host `new`, value
       `<your-github-username>.github.io`
-- [ ] **Settings → Pages → Custom domain:** `new.bluestonesbpo.com` → Save
+- [ ] **Settings → Pages → Custom domain:** `new.bluestonesbpo.co.kr` → Save
 - [ ] Wait for the certificate, then tick **Enforce HTTPS** (can take an hour)
-- [ ] Review at `https://new.bluestonesbpo.com`
+- [ ] Review at `https://new.bluestonesbpo.co.kr`
 
 > The `noindex` here is deliberate, and it is the one place it belongs. A crawlable copy
 > of your site is duplicate content competing with the real one. `validate.py` enforces
@@ -68,9 +68,9 @@ robots.txt, and show an orange banner. Nothing about the live Wix site changes.
 
 - [ ] Set `staging.enabled` to `false` in `site.config.json`
 - [ ] `python build.py && python scripts/validate.py` — confirm the robots meta is back to
-      `index,follow` and `dist/CNAME` reads `www.bluestonesbpo.com`
+      `index,follow` and `dist/CNAME` reads `www.bluestonesbpo.co.kr`
 - [ ] Commit and push
-- [ ] **Settings → Pages → Custom domain:** `www.bluestonesbpo.com` → Save
+- [ ] **Settings → Pages → Custom domain:** `www.bluestonesbpo.co.kr` → Save
 - [ ] DNS: repoint the `www` `CNAME` from Wix to `<your-github-username>.github.io`
 - [ ] DNS: four `A` records on the apex pointing to
       `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
@@ -85,7 +85,7 @@ been in Search Console for a while, and it has inbound links from your LinkedIn 
 pages.
 
 - [ ] **Do not delete the Wix site on day one.** Keep it live until the new site is indexed.
-- [ ] If `bluestonesbpo.com` currently points at Wix, point it at GitHub Pages and set up
+- [ ] If `bluestonesbpo.co.kr` currently points at Wix, point it at GitHub Pages and set up
       **301 redirects** from every old path. The mapping:
 
       | Old | New |
@@ -146,7 +146,7 @@ The form currently degrades to a `mailto:` link, which works but is ugly and los
 - [ ] Put the endpoint URL in `contact.form_endpoint` in `site.config.json`
 - [ ] Rebuild, push, and **send yourself a test enquiry from the live site.** A contact form
       that silently fails is the single most expensive bug a B2B site can have.
-- [ ] Confirm `info@bluestonesbpo.com` actually receives and is monitored.
+- [ ] Confirm `info@bluestonesbpo.co.kr` actually receives and is monitored.
 
 ## 6. Start the daily loop
 

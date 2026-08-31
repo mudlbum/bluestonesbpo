@@ -804,9 +804,13 @@ def header_html(lang, active="", alternates=None):
 
     banner = ""
     if IS_STAGING:
+        # Derived, not hardcoded. This read "the live site is still
+        # www.bluestonesbpo.com" long after that site came down, and it would
+        # have gone on saying so through a domain change.
+        _live = CFG["domain"].rstrip("/")
         banner = ('<div class="staging-bar" role="status">Staging preview — not indexed by '
-                  'search engines. The live site is still '
-                  '<a href="https://www.bluestonesbpo.com">www.bluestonesbpo.com</a>.</div>')
+                  'search engines. This publishes to '
+                  f'<a href="{_live}">{_live.split("//")[1]}</a>.</div>')
 
     return f"""<body>
 <a class="skip" href="#main">{T(lang,'skip')}</a>
@@ -1953,7 +1957,7 @@ def render_feeds(posts, services, pages):
         # llms.txt map, the favicon, the manifest — still has to be written, or the
         # pages that reference them ship broken links.
         write(os.path.join(DIST, "robots.txt"),
-              "# Staging copy of bluestonesbpo.com — not for indexing.\n"
+              "# Staging copy of bluestonesbpo.co.kr — not for indexing.\n"
               "# The production site is the canonical one.\n"
               "User-agent: *\nDisallow: /\n")
     else:

@@ -99,4 +99,4 @@ are subject to the exclusive jurisdiction of the courts of Seoul, Republic of Ko
 
 ## 11. Contact
 
-**Bluestones BPO** · info@bluestonesbpo.com · +82 2 515 4534
+**Bluestones BPO** · info@bluestonesbpo.co.kr · +82 2 515 4534

@@ -72,7 +72,7 @@ publication, and corrections are issued promptly when something is wrong.
 
 If something here is wrong, tell us and we will fix it.
 
-Email **info@bluestonesbpo.com** with the page URL and what is incorrect. Substantive
+Email **info@bluestonesbpo.co.kr** with the page URL and what is incorrect. Substantive
 corrections — a wrong figure, a superseded rule, a misstated deadline — are made to the article
 and noted in it, with the modification date updated. We do not quietly edit a page and pretend
 it always said the new thing.

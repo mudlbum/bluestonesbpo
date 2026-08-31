@@ -63,7 +63,7 @@ member of our team reviews after publication.
 That process is described in full, including its limits, in our
 [editorial and sourcing policy](/editorial-policy/). We think the disclosure matters more than
 the reassurance: an automated gate checks that a source exists and is live, not that the prose
-around it is correct. If you find an error, tell us at **info@bluestonesbpo.com** and we will
+around it is correct. If you find an error, tell us at **info@bluestonesbpo.co.kr** and we will
 correct it.
 
 ## Limitation

@@ -83,7 +83,7 @@ Under PIPA and, where applicable, the GDPR, you may ask us to:
 - provide it in a portable form
 - withdraw consent you previously gave
 
-Email **info@bluestonesbpo.com** and we will respond within the period the applicable law
+Email **info@bluestonesbpo.co.kr** and we will respond within the period the applicable law
 requires. We will not ask you to justify the request.
 
 You also have the right to complain to a supervisory authority: in Korea, the **Personal
@@ -113,4 +113,4 @@ Questions about this policy, or about personal information generally:
 
 **Bluestones BPO**
 Construction Building #711, Eonju-ro, Gangnam-gu, Seoul 06050, Republic of Korea
-info@bluestonesbpo.com · +82 2 515 4534
+info@bluestonesbpo.co.kr · +82 2 515 4534
