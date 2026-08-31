@@ -135,6 +135,7 @@ STR = {
         "form_msg": "Tell us briefly what you need",
         "form_send": "Send enquiry",
         "form_privacy": "We use what you send only to answer your enquiry. See our privacy policy.",
+        "form_direct": "Tell us what you need and we will come back with a scope and a price. Email or call us directly — both reach the same team.",
     },
     "ko": {
         "skip": "본문으로 건너뛰기",
@@ -187,6 +188,7 @@ STR = {
         "form_msg": "필요하신 내용을 간단히 적어 주세요",
         "form_send": "문의 보내기",
         "form_privacy": "보내주신 정보는 문의 답변에만 사용합니다. 개인정보처리방침을 참고하세요.",
+        "form_direct": "필요하신 업무를 알려주시면 범위와 견적을 회신드립니다. 이메일 또는 전화 모두 같은 담당자에게 연결됩니다.",
     },
 }
 
@@ -1571,11 +1573,25 @@ def render_category(c, lang, posts, services):
 
 def contact_form(lang):
     ep = CFG["contact"]["form_endpoint"]
-    # No endpoint configured yet? Degrade to mailto so the form is never a dead
-    # end — a broken contact route is an instant trust failure on a B2B site.
-    action = ep or f"mailto:{BIZ['email']}"
-    method = "post" if ep else "get"
-    enc = '' if ep else ' enctype="text/plain"'
+    # With no endpoint configured this used to render the full form pointed at a
+    # `mailto:` action. That looks like it works and mostly does not: a mailto
+    # form needs a desktop mail client registered as the default handler, so
+    # anyone on webmail gets nothing at all when they press Send, with no error.
+    # A B2B lead form that fails silently is worse than no form — the visitor
+    # believes they made contact and you never learn they existed. So until an
+    # endpoint is set, show the real contact routes instead of a decoy.
+    if not ep:
+        return f"""<div class="lead-form-fallback">
+  <p class="lead">{T(lang,'form_direct')}</p>
+  <p class="contact-routes">
+    <a class="btn btn-primary" href="mailto:{BIZ['email']}">{BIZ['email']}</a>
+    <a class="btn btn-outline" href="tel:{BIZ['telephone'].replace(' ', '')}">{BIZ['telephone']}</a>
+  </p>
+  <p class="muted small">{CFG['contact']['response_promise']}</p>
+</div>"""
+    action = ep
+    method = "post"
+    enc = ''
     needs = {
         "en": ["Accounting & bookkeeping", "Payroll & HR", "Tax & VAT",
                "Company registration", "Operation support", "Something else"],

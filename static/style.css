@@ -592,6 +592,12 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem;
   background: var(--mist); padding: 1.8rem; border-radius: var(--radius); margin: 2rem 0;
 }
+/* Shown in place of the form until contact.form_endpoint is configured. */
+.lead-form-fallback {
+  background: var(--mist); padding: 1.8rem; border-radius: var(--radius); margin: 2rem 0;
+}
+.lead-form-fallback .lead { margin-top: 0; }
+.contact-routes { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1.1rem 0 .8rem; }
 .field { display: flex; flex-direction: column; gap: .35rem; }
 .field-wide { grid-column: 1 / -1; }
 .field label { font-size: .84rem; font-weight: 700; color: var(--navy); }
