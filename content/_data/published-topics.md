@@ -3,6 +3,16 @@
 Read this before choosing today's story. Do not re-cover any of these;
 either write something new or update the existing article in place.
 
+- **2026-11-23** — A Weekly Cash Flow Forecast for a Korean Subsidiary: A Rolling 13-Week Template  
+  `weekly-cash-flow-forecast-korea` · bank reconciliation, cash flow forecasting, cash flow template, ifrs foundation, korean subsidiary, receivables timing
+- **2026-09-01** — Korea Now Fines a Liaison Office That Skips Its 10 February Report  
+  `korea-liaison-office-report-penalty` · corporate tax act, foreign corporation, invest korea, korea legislation research institute, liaison office korea, ministry of economy and finance
+- **2026-08-30** — The Korean Filing Calendar: One Deadline Vanished, and One Lands in 2027  
+  `korea-tax-filing-calendar` · foreign invested company, four major insurances, invest korea, korea filing deadlines, korea workers' compensation and welfare service, local tax act
+- **2026-08-29 22:30:00** — Chuseok Falls Over a Saturday This Year — and Korean Law Gives Nothing Back  
+  `korea-public-holidays-2026-payroll` · chuseok 2026, foreign employers, holiday pay, holiday work premium, invest korea, korea aerospace administration
+- **2026-08-29** — Korea's Spousal Leave Rules Change on 18 September — What Payroll Has to Do Before Then  
+  `korea-spousal-leave-changes` · employment insurance, employment insurance act, equal employment act, equal employment opportunity and work-family balance assistance act, foreign employers, korea legislation research institute
 - **2026-08-28 22:30:00** — Entertainment Expenses in Korea: The KRW 30,000 Card Rule, and the Ceiling Above It  
   `korea-business-promotion-expense-limit` · business promotion expenses, corporate credit card, corporate income tax, corporate tax act, deductible expenses, entertainment expenses
 - **2026-08-28 21:00:00** — Unpaid Wages Become a Five-Year Offence in Korea on 8 October  
